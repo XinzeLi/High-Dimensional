@@ -1,0 +1,8 @@
+\BOOKMARK [1][-]{section.1}{Intro\040to\040Sparse\040CCA}{}% 1
+\BOOKMARK [1][-]{section.2}{Problem\040Formulation}{}% 2
+\BOOKMARK [1][-]{section.3}{Analysis}{}% 3
+\BOOKMARK [2][-]{subsection.3.1}{Cone\040Condition}{section.3}% 4
+\BOOKMARK [2][-]{subsection.3.2}{Peeling}{section.3}% 5
+\BOOKMARK [1][-]{section.4}{Improvements}{}% 6
+\BOOKMARK [2][-]{subsection.4.1}{Regression}{section.4}% 7
+\BOOKMARK [2][-]{subsection.4.2}{Analysis\040of\040Iterative\040Regression}{section.4}% 8

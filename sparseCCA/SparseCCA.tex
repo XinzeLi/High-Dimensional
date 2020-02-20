@@ -1,0 +1,706 @@
+\documentclass[12pt]{article}
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{scribe}
+\usepackage{listings}
+\usepackage{algorithm}
+\usepackage{mathtools}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{hyperref}
+\usepackage{cleveref}
+%\usepackage[style=authoryear]{biblatex}
+\renewcommand{\Pr}{{\bf Pr}}
+\newcommand{\Prx}{\mathop{\bf Pr\/}}
+\newcommand{\E}{{\bf E}}
+\newcommand{\Ex}{\mathop{\bf E\/}}
+\newcommand{\Var}{{\bf Var}}
+\newcommand{\Varx}{\mathop{\bf Var\/}}
+\newcommand{\Cov}{{\bf Cov}}
+\newcommand{\Cor}{{\bf Corr}}
+\newcommand{\Covx}{\mathop{\bf Cov\/}}
+\newcommand{\rank}{\text{rank}}
+
+% shortcuts for symbol names that are too long to type
+\newcommand{\eps}{\epsilon}
+\newcommand{\lam}{\lambda}
+\renewcommand{\l}{\ell}
+\newcommand{\la}{\langle}
+\newcommand{\ra}{\rangle}
+%\newcommand{\wh}{\widehat}
+
+% "blackboard-fonted" letters for the reals, naturals etc.
+\newcommand{\R}{\mathbb R}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\F}{\mathbb F}
+\newcommand{\Q}{\mathbb Q}
+%\newcommand{\C}{\mathbb C}
+\DeclareMathOperator{\Tr}{Tr}
+
+% operators that should be typeset in Roman font
+\newcommand{\poly}{\mathrm{poly}}
+\newcommand{\polylog}{\mathrm{polylog}}
+\newcommand{\sgn}{\mathrm{sgn}}
+\newcommand{\avg}{\mathop{\mathrm{avg}}}
+\newcommand{\val}{{\mathrm{val}}}
+
+% complexity classes
+\renewcommand{\P}{\mathrm{P}}
+\newcommand{\NP}{\mathrm{NP}}
+\newcommand{\BPP}{\mathrm{BPP}}
+\newcommand{\DTIME}{\mathrm{DTIME}}
+\newcommand{\ZPTIME}{\mathrm{ZPTIME}}
+\newcommand{\BPTIME}{\mathrm{BPTIME}}
+\newcommand{\NTIME}{\mathrm{NTIME}}
+
+% values associated to optimization algorithm instances
+\newcommand{\Opt}{{\mathsf{Opt}}}
+\newcommand{\Alg}{{\mathsf{Alg}}}
+\newcommand{\Lp}{{\mathsf{Lp}}}
+\newcommand{\Sdp}{{\mathsf{Sdp}}}
+\newcommand{\Exp}{{\mathsf{Exp}}}
+
+% if you think the sum and product signs are too big in your math mode; x convention
+% as in the probability operators
+\newcommand{\littlesum}{{\textstyle \sum}}
+\newcommand{\littlesumx}{\mathop{{\textstyle \sum}}}
+\newcommand{\littleprod}{{\textstyle \prod}}
+\newcommand{\littleprodx}{\mathop{{\textstyle \prod}}}
+
+% horizontal line across the page
+\newcommand{\horz}{
+\vspace{-.4in}
+\begin{center}
+\begin{tabular}{p{\textwidth}}\\
+\hline
+\end{tabular}
+\end{center}
+}
+
+% calligraphic letters
+\newcommand{\calA}{{\cal A}}
+\newcommand{\calB}{{\cal B}}
+\newcommand{\calC}{{\cal C}}
+\newcommand{\calD}{{\cal D}}
+\newcommand{\calE}{{\cal E}}
+\newcommand{\indep}{\rotatebox[origin=c]{90}{$\models$}}
+\newcommand{\calF}{{\cal F}}
+\newcommand{\calG}{{\cal G}}
+\newcommand{\calH}{{\cal H}}
+\newcommand{\calI}{{\cal I}}
+\newcommand{\calJ}{{\cal J}}
+\newcommand{\calK}{{\cal K}}
+\newcommand{\calL}{{\cal L}}
+\newcommand{\calM}{{\cal M}}
+\newcommand{\calN}{{\cal N}}
+\newcommand{\calO}{{\cal O}}
+\newcommand{\calP}{{\cal P}}
+\newcommand{\calQ}{{\cal Q}}
+\newcommand{\calR}{{\cal R}}
+\newcommand{\calS}{{\cal S}}
+\newcommand{\calT}{{\cal T}}
+\newcommand{\calU}{{\cal U}}
+\newcommand{\calV}{{\cal V}}
+\newcommand{\calW}{{\cal W}}
+\newcommand{\calX}{{\cal X}}
+\newcommand{\calY}{{\cal Y}}
+\newcommand{\calZ}{{\cal Z}}
+\newcommand{\com}{^\complement}
+\newcommand{\inv}{^{-1}}
+\newcommand{\tp}{^\top}
+% bold letters (useful for random variables)
+\renewcommand{\a}{{\boldsymbol a}}
+\renewcommand{\b}{{\boldsymbol b}}
+\renewcommand{\c}{{\boldsymbol c}}
+\renewcommand{\d}{{\boldsymbol d}}
+\newcommand{\e}{{\boldsymbol e}}
+\newcommand{\f}{{\boldsymbol f}}
+\newcommand{\g}{{\boldsymbol g}}
+\newcommand{\h}{{\boldsymbol h}}
+\renewcommand{\i}{{\boldsymbol i}}
+\renewcommand{\j}{{\boldsymbol j}}
+\renewcommand{\k}{{\boldsymbol k}}
+\newcommand{\m}{{\boldsymbol m}}
+\newcommand{\n}{{\boldsymbol n}}
+\renewcommand{\o}{{\boldsymbol o}}
+\newcommand{\p}{{\boldsymbol p}}
+\newcommand{\q}{{\boldsymbol q}}
+\renewcommand{\r}{{\boldsymbol r}}
+\newcommand{\s}{{\boldsymbol s}}
+\renewcommand{\t}{{\boldsymbol t}}
+\renewcommand{\u}{{\boldsymbol u}}
+\renewcommand{\v}{{\boldsymbol v}}
+\newcommand{\w}{{\boldsymbol w}}
+\newcommand{\x}{{\boldsymbol x}}
+\newcommand{\y}{{\boldsymbol y}}
+\newcommand{\z}{{\boldsymbol z}}
+\newcommand{\A}{{\boldsymbol A}}
+\newcommand{\B}{{\boldsymbol B}}
+\newcommand{\D}{{\boldsymbol D}}
+%\newcommand{\G}{{\boldsymbol G}}
+\renewcommand{\H}{{\boldsymbol H}}
+\newcommand{\I}{{\boldsymbol I}}
+\newcommand{\J}{{\boldsymbol J}}
+\newcommand{\K}{{\boldsymbol K}}
+\renewcommand{\L}{{\boldsymbol L}}
+\newcommand{\M}{{\boldsymbol M}}
+\renewcommand{\O}{{\boldsymbol O}}
+\renewcommand{\S}{{\boldsymbol S}}
+\newcommand{\T}{{\boldsymbol T}}
+%\newcommand{\U}{{\boldsymbol U}}
+\newcommand{\V}{{\boldsymbol V}}
+\newcommand{\W}{{\boldsymbol W}}
+\newcommand{\X}{{\boldsymbol X}}
+\newcommand{\Y}{{\boldsymbol Y}}
+\newcommand{\bra}[1]{\left(#1\right)}
+\newcommand{\bgbra}[1]{\left\{#1\right\}}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\innprod}[1]{\left\langle#1\right\rangle}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\wh}[1]{\widehat{#1}}
+\newcommand{\wt}[1]{\widetilde{#1}}
+\newcommand{\srt}{^{\frac{1}{2}}}
+\newcommand{\idx}[1]{^{\bra{#1}}}
+\def\beq{\begin{equation}}
+\def\eeq{\end{equation}}
+\def\bal{\begin{aligned}}
+\def\eal{\end{aligned}}
+\def\beqal{\begin{equation}\begin{aligned}}
+\def\eeqal{\end{aligned}\end{equation}}
+\newcommand{\mtline}[1]{\beq
+\left\{
+\bal
+#1
+\eal
+\right.
+\eeq}
+
+
+% useful for Fourier analysis
+\newcommand{\bits}{\{-1,1\}}
+\newcommand{\bitsn}{\{-1,1\}^n}
+\newcommand{\bn}{\bitsn}
+\newcommand{\isafunc}{{: \bitsn \rightarrow \bits}}
+\newcommand{\fisafunc}{{f : \bitsn \rightarrow \bits}}
+\newcommand{\ndone}{\frac{1}{n}}
+\newcommand{\supp}{\text{supp}}
+\newcommand*\Let[2]{\State #1 $\gets$ #2}
+
+
+\makeatletter
+\newcommand{\distas}[1]{\mathbin{\overset{#1}{\kern\z@\sim}}}%
+\newsavebox{\mybox}\newsavebox{\mysim}
+\newcommand{\distras}[1]{%
+  \savebox{\mybox}{\hbox{\kern3pt$\scriptstyle#1$\kern3pt}}%
+  \savebox{\mysim}{\hbox{$\sim$}}%
+  \mathbin{\overset{#1}{\kern\z@\resizebox{\wd\mybox}{\ht\mysim}{$\sim$}}}%
+}
+\makeatother
+\newcommand{\iid}{\distras{\text{i.i.d.}}}
+\makeatletter
+\newcommand*{\rom}[1]{\expandafter\@slowromancap\romannumeral #1@}
+\makeatother
+
+% if you want
+\newcommand{\half}{{\textstyle \frac12}}
+
+\newcommand{\myfig}[4]{\begin{figure}[h] \begin{center} \includegraphics[width=#1\textwidth]{#2} \caption{#3} \label{#4} \end{center} \end{figure}} 
+\newcommand{\chara}{\mathbb{1}}
+
+\Scribe{Xinze Li}
+\Lecturer{Chao Gao}
+\LectureNumber{12}
+\LectureDate{Feb 17, 2020}
+\LectureTitle{Sparse CCA}
+
+\lstset{style=mystyle}
+
+
+
+\begin{document}
+	\MakeScribeTop
+\section{Intro to Sparse CCA}
+Let's first describe the problem setting. Let $X\in \R^p$, and $Y\in \R^q$. Our goal is to find $\theta$ and $\eta$ such that $\Cor\bra{\theta^\top X, \eta^\top Y}$ is the largest. Suppose
+\beq
+\Cov\begin{pmatrix}
+X\\Y
+\end{pmatrix}=
+\begin{pmatrix}
+\Sigma_{x}&\Sigma_{xy}\\
+\Sigma_{yx}&\Sigma_{y}\\
+\end{pmatrix}
+\eeq
+Then we have
+\beq
+\Cor\bra{\theta^\top X, \eta^\top Y}=\frac{\theta^\top \Sigma_{xy}\eta}{\sqrt{\theta^\top \Sigma_{x}\theta}\sqrt{\eta^\top \Sigma_{y}\eta}}
+\eeq
+We could formulate the problem as
+\beqal
+\max\quad& \theta^\top \Sigma_{xy}\eta\\
+s.t.\quad& \theta^\top \Sigma_{x}\theta=\eta^\top \Sigma_{y}\eta=1
+\eeqal
+Suppose that
+\beq\label{eq:transform}
+\left\{
+\bal
+a&=\Sigma_{xx}^{\frac{1}{2}}\theta\\
+b&=\Sigma_{yy}^{\frac{1}{2}}\eta\\
+\eal
+\right.
+\eeq
+So now the problem is
+\beqal
+\max\quad& a^\top\Sigma_{x}^{-\frac{1}{2}} \Sigma_{xy}\Sigma_{y}^{-\frac{1}{2}}b\\
+s.t.\quad& \norm{a}=\norm{b}=1
+\eeqal
+If we do SVD on $\Sigma_{x}^{-\frac{1}{2}} \Sigma_{xy}\Sigma_{y}^{-\frac{1}{2}}$, i.e.
+\beq
+\Sigma_{xx}^{-\frac{1}{2}} \Sigma_{xy}\Sigma_{yy}^{-\frac{1}{2}}=\sum_j \lam_ja_jb_j^\top
+\eeq
+Then the solution of $a$ and $b$ is $(a_1,b_1)$. And the solution of $\theta$ and $\eta$ is $(\Sigma_{x}^{-\frac{1}{2}}a_1,\Sigma_{y}^{-\frac{1}{2}}b_1)$. And so by~\ref{eq:transform} we have
+\beq
+\Sigma_{xy}=\Sigma_{x}\bra{\sum_j \lam_j\theta_j\eta_j^\top}\Sigma_{y}
+\eeq
+Note that 
+\beq
+\theta_j^\top\Sigma_{x}\theta_k=\eta_j^\top\Sigma_{y}\eta_k=\delta_j^k
+\eeq
+\section{Problem Formulation}
+For sparse CCA, we only consider rank 1 model, i.e. $\text{rank}(\Sigma_{xy})=1$ and
+\beq\label{eq:sigmaxy}
+\Sigma_{xy}=\Sigma_{x}\bra{ \lam\theta\eta^\top}\Sigma_{y}
+\eeq
+Also suppose that
+\beq
+\theta^\top \Sigma_{x}\theta=\eta^\top \Sigma_{y}\eta=1
+\eeq
+and that $\theta\in\Theta(p,s_1)$ and $\eta\in\Theta(p,s_2)$. We further assume that
+\beqal
+M\inv \leq \lam_{\min}(\Sigma_{x})\leq \lam_{\max}\bra{\Sigma_{x}}\leq M\\
+M\inv \leq \lam_{\min}(\Sigma_{y})\leq \lam_{\max}\bra{\Sigma_{y}}\leq M
+\eeqal
+Now suppose that 
+\beq
+\begin{pmatrix}
+X_1\\Y_1
+\end{pmatrix}
+,\cdots,\begin{pmatrix}
+X_n\\Y_n
+\end{pmatrix}
+\iid \calN\bra{\begin{pmatrix}
+0\\0
+\end{pmatrix}
+,\begin{pmatrix}
+\Sigma_{x}&\Sigma_{xy}\\
+\Sigma_{yx}&\Sigma_{y}
+\end{pmatrix}}
+\eeq
+And a natural estimator is the following
+\beqal
+\max_{\theta\in \R^p, \eta\in \R^q} \quad &\theta\tp \wh{\Sigma}_{xy}\eta\\
+s.t.\quad &\theta\tp \wh{\Sigma}_x\theta =1,\quad \eta\tp \wh{\Sigma}_{y}\eta =1\\
+&\norm{\theta}_0=s_1,\quad \norm{\eta}_0\leq s_2
+\eeqal
+We know that this estimator achieves the minimax rate, but we will not analyze the property. Instead, let's consider the convex relaxation as sparse PCA.
+\beq
+\theta\tp \wh{\Sigma}_{xy}\eta = \innprod{\wh{\Sigma}_{xy}, A},\quad A = \theta\eta\tp
+\eeq
+Note that
+\beq
+\wh{\Sigma}_x^{\frac{1}{2}}A\wh{\Sigma}_y^{\frac{1}{2}}=\bra{\wh{\Sigma}_x\srt \theta}\cdot \bra{\wh{\Sigma}_y\srt \eta}\tp
+\eeq
+And so we could construct the following set
+\beq
+\calA = \bgbra{ab\tp:a\in\R^p,b\in\R^q,\norm{a}=\norm{b}=1}
+\eeq
+and obviously
+\beq
+\wh{\Sigma}_x^{\frac{1}{2}}A\wh{\Sigma}_y^{\frac{1}{2}}\in \calA
+\eeq
+Now we state the following lemma
+\begin{lemma}
+\beq \text{conv}(\calA)=\calB=\bgbra{B\in\R^{p\times q}:\norm{B}_N\leq 1}\eeq 
+\end{lemma}
+\begin{proof}
+First, obviously, $\calA\subseteq\calB$. Now we need to prove that every element in $\calB$, it could be represented as convex combination of elements in $\calA$. Note that if $B=\sum\lam_ju_jv_j\tp$, and $\norm{B}_N\leq 1$, then $\sum_j\lam_j\leq 1$ and $\lam_j\geq 0$. Thus,
+\beq
+B=\sum_j \lam_ju_jv_j\tp+\bra{1-\sum_j \lam_j}\cdot 0
+\eeq
+Since $0\in\text{conv}(\calA)\subseteq \calB$, \footnote{Because if $ab\tp\in\calA$, then $-ab\tp\in\calA$, and $0=\frac{1}{2}ab\tp +\frac{1}{2}\bra{-ab\tp}$} the proof is completed.
+\end{proof}
+So now we could introduce the following convex program as in~\cite{gao2014sparse}
+\beqal\label{eq:cvxrelax}
+\max_{A\in\R^{p\times q}}\quad &\innprod{\wh{\Sigma}_{xy}, A}-\rho \norm{A}_1\\
+s.t.\quad &\norm{\wh{\Sigma}_x\srt A\wh{\Sigma}_y\srt}_N\leq 1
+\eeqal
+\section{Analysis}
+Now note that we could not use~\ref{eq:sigmaxy} directly to basic inequality directly, because it may not be feasible to the convex constraint. Thus we now introduce
+\beq
+\wt{\theta}=\frac{\theta}{\sqrt{\theta\tp\wh{\Sigma}_x\theta}},\quad \wt{\eta}=\frac{\eta}{\sqrt{\eta\tp\wh{\Sigma}_y\eta}}
+\eeq
+and we have
+\beq
+\norm{\wh{\Sigma}_x\srt \wt{\theta}}=1,\quad \norm{\wh{\Sigma}_y\srt \wt{\eta}}=1
+\eeq
+Now we define the surrogate of the truth $\wt{\Sigma}$ as
+\beq\label{eq:Atilde}
+\wt{A}=\wt{\theta}\wt{\eta}\tp
+\eeq
+which satisfies the constraint
+\beq
+\norm{\wh{\Sigma}_x\srt \wt{A}\wh{\Sigma}_y\srt}_N\leq 1
+\eeq
+So suppose $\wh{A}$ is the solution to the convex relaxation problem in~\ref{eq:cvxrelax},
+ now we could apply the basic inequality
+\beq\label{eq:basic}
+\innprod{\wh{\Sigma}_{xy}, \wh{A}}-\rho \norm{\wh{A}}_1\geq \innprod{\wh{\Sigma}_{xy}, \wt{A}}-\rho\norm{\wt{A}}_1
+\eeq
+Naturally, we also introduce
+\beq
+\wt{\Sigma}_{xy}=\wh{\Sigma}_x(\lam\theta \eta\tp)\wh{\Sigma}_y
+\eeq
+Rearranging the order of~\ref{eq:basic}, we have
+\beq
+\innprod{\wt{\Sigma}_{xy}, \wt{A}-\wh{A}}\leq \rho \bra{\norm{\wt{A}}_1-\norm{\wh{A}}_1}+\innprod{\wt{\Sigma}_{xy}-\wh{\Sigma}_{xy}, \wt{A}-\wh{A}}
+\eeq
+Using the following notation
+\beqal
+&\Delta = \wh{A}-\wt{A},\quad S_1=\text{supp}(\theta),\quad S_2=\supp(\eta)\\
+&\norm{\Delta_{S_1S_2}}=\sum_{(j,k)\in S_1\times S_2}\abs{\Delta_{jk}},\quad \norm{\Delta_{(S_1S_2)\com}}=\sum_{(j,k)\in (S_1\times S_2)\com}\abs{\Delta_{jk}}
+\eeqal
+and applying Holder's inequality gives
+\beq
+\innprod{\wt{\Sigma}_{xy}, \wt{A}-\wh{A}}\leq \rho \bra{\norm{\wt{A}}_1-\norm{\wh{A}}_1}+\norm{ \wt{\Sigma}_{xy}-\wh{\Sigma}_{xy} }_\infty\cdot \norm{ \wt{A}-\wh{A} }_1
+\eeq
+Now suppose $\norm{ \wt{\Sigma}_{xy}-\wh{\Sigma}_{xy} }_\infty\leq \frac{\rho}{2}$, then
+\beqal\label{eq:anal1}
+\innprod{\wt{\Sigma}_{xy}, \wt{A}-\wh{A}}&\leq \rho\bra{\norm{\wt{A}_{S_1S_2}}_1 -\norm{\wt{A}_{S_1S_2} +\Delta_{S_1S_2} }_1- \norm{\Delta_{(S_1S_2)\com}}_1}\\
+&+\frac{\rho}{2}\norm{\Delta_{S_1S_2}}_1+\frac{\rho}{2}\norm{\Delta_{(S_1S_2)\com}}_1\\
+&\leq \frac{3\rho}{2}\norm{\Delta_{S_1S_2}}-\frac{\rho}{2}\norm{\Delta_{(S_1S_2)\com}}_1
+\eeqal
+\subsection{Cone Condition}
+Now we need to show that the LHS is nonnegative in order to obtain the cone condition. So we want to relate it to a loss function. First let's normalize $\wt{\Sigma}_{xy}$
+\beq
+\wt{\Sigma}_{xy}=\wh{\Sigma}_x(\lam\theta\eta\tp)\wh{\Sigma}_y=\wh{\Sigma}_x(\wt{\lam}\wt{\theta}\wt{\eta}\tp)\wh{\Sigma}_y
+\eeq
+where $\wt{\lam}$ is defined as
+\beq
+\wt{\lam}=\lam \sqrt{\theta\tp\wh{\Sigma}_x\theta}\sqrt{\eta\tp\wh{\Sigma}_y\eta}=(1+o_p(1))\lam
+\eeq
+Then we expand the innerproduct term $\innprod{\wt{\Sigma}_{xy}, \wt{A}-\wh{A}}$
+\beqal
+\innprod{\wt{\Sigma}_{xy}, \wt{A}-\wh{A}}&=\wt{\lam}\innprod{\wh{\Sigma}_x\wt{\theta}\wt{\eta}\tp \wh{\Sigma}_y,\wt{\theta}\wt{\eta}\tp-\wh{A}}\\
+&=\wt{\lam}\bra{1-\innprod{ \wh{\Sigma}_x\srt\wt{\theta}\wt{\eta}\tp \wh{\Sigma}_y\srt,  \wh{\Sigma}_x\srt\wh{A}\wh{\Sigma}_y\srt}}
+\eeqal
+Now note that
+\beqal
+\norm{\wh{\Sigma}_x\srt\wh{A}\wh{\Sigma}_y\srt- \wh{\Sigma}_x\srt\wt{\theta}\wt{\eta}\tp \wh{\Sigma}_y\srt }_F^2 &= \norm{\wh{\Sigma}_x\srt\wh{A}\wh{\Sigma}_y\srt}_F^2+\norm{\wh{\Sigma}_x\srt\wt{\theta}\wt{\eta}\tp \wh{\Sigma}_y\srt}_F^2-2\innprod{ \wh{\Sigma}_x\srt\wt{\theta}\wt{\eta}\tp \wh{\Sigma}_y\srt,  \wh{\Sigma}_x\srt\wh{A}\wh{\Sigma}_y\srt}\\
+&=1+\norm{\wh{\Sigma}_x\srt\wh{A}\wh{\Sigma}_y\srt}_F^2-2\innprod{ \wh{\Sigma}_x\srt\wt{\theta}\wt{\eta}\tp \wh{\Sigma}_y\srt,  \wh{\Sigma}_x\srt\wh{A}\wh{\Sigma}_y\srt}\\
+&\leq 2-2\innprod{ \wh{\Sigma}_x\srt\wt{\theta}\wt{\eta}\tp \wh{\Sigma}_y\srt,  \wh{\Sigma}_x\srt\wh{A}\wh{\Sigma}_y\srt}\\
+\eeqal
+Thus, the LHS of~\ref{eq:anal1} has the lower bound
+\beq
+\innprod{\wt{\Sigma}_{xy}, \wt{A}-\wh{A}}\geq \frac{\wt{\lam}}{2}\norm{\wh{\Sigma}_x\srt(\wh{A}-\wt{A})\wh{\Sigma}_y\srt}_F^2\geq 0
+\eeq
+So we now conclude that if $\rho \geq 2\norm{ \wt{\Sigma}_{xy}-\wh{\Sigma}_{xy} }_\infty$, then
+\mtline{\label{eq:conecondition}
+\frac{\wt{\lam}}{2}\norm{\wh{\Sigma}_x\srt(\wh{A}-\wt{A})\wh{\Sigma}_y\srt}_F^2&\leq \frac{3\rho }{2}\norm{\Delta}_F\\
+\norm{\Delta_{(S_1S_2)\com}}_1&\leq 3\norm{\Delta_{S_1S_2}}_1
+}
+Note that the first inequality is derived because
+\beq
+\norm{\Delta_{S_1S_2}}_1\leq \sqrt{s_1s_2}\norm{\Delta_{S_1S_2}}_F\leq\sqrt{s_1s_2}\norm{\Delta}_F
+\eeq
+\subsection{Peeling}
+In this subsection, we will use the peeling technique as in Lasso to compare $\norm{\wh{\Sigma}_x\srt\Delta\wh{\Sigma}_y\srt}_F$ with $\norm{\Delta}_F$. We will use the following notation for restricted eigenvalue
+\beq
+\lam_{\min}^\Gamma(k)=\min_{\norm{u}=1,\norm{u}_0\leq k}u\tp \Gamma u,\quad 
+\lam_{\max}^\Gamma(k)=\max_{\norm{u}=1,\norm{u}_0\leq k}u\tp \Gamma u
+\eeq
+We will peel $p\times q$ into $K+1$ part according to $\Delta$. The first part is just $S_1\times S_2$ that contains $s_1s_2$ elements. The second part is denoted as $J_1$ as
+\beq
+J_1=\bgbra{(j,k):\abs{\Delta_{jk}}\text{ are the largest }t\text{ among all entries in }(S_1\times S_2)\com}
+\eeq
+and the rest as follows. Note that $\abs{J_K}\leq t$, and $\abs{J_k}=t$, for all $1\leq k\leq K$. Also denote 
+\beq
+\wt{J}=(S_1\times S_2)\cup J_1
+\eeq
+Using triangle inequality, we have
+\beqal\label{eq:anal2}
+\norm{\wh{\Sigma}_x\srt\Delta\wh{\Sigma}_y\srt}_F&\geq \norm{\wh{\Sigma}_x\srt\Delta_{\wt{J}}\wh{\Sigma}_y\srt}_F-\sum_{k=2}^{K}\norm{\wh{\Sigma}_x\srt\Delta_{J_k}\wh{\Sigma}_y\srt}_F\\
+&\geq \sqrt{\lam_{\min}^{\wh{\Sigma}_x}(s_1s_2+t)\lam_{\min}^{\wh{\Sigma}_y}(s_1s_2+t)}\norm{\Delta_{\wt{J}}}_F-\sqrt{\lam_{\max}^{\wh{\Sigma}_x}(t)\lam_{\max}^{\wh{\Sigma}_y}(t)}\sum_{k=2}^K\norm{\Delta_{J_k}}_F
+\eeqal
+Now let's estimate $\sum_{k=2}^K \norm{\Delta_{J_k}}_F$, which is essentially the proof in Lasso
+\beqal
+\sum_{k=2}^K \norm{\Delta_{J_k}}_F&\leq \sum_{k=2}^K \sqrt{t}\norm{\Delta_{J_k}}_\infty\leq \sum_{k=2}^K \sqrt{t}\frac{\norm{\Delta_{J_{k-1}}}_1}{t}\\
+&\leq \frac{1}{\sqrt{t}}\sum_{k=1}^K\norm{\Delta_{J_k}}_1 = \frac{1}{\sqrt{t}}\norm{\Delta_{(S_1S_2)\com}}_1\\
+&\leq \frac{3}{\sqrt{t}}\norm{\Delta_{S_1S_2}}_1\leq 3\sqrt{\frac{s_1s_2}{t}}\norm{\Delta_{\wt{J}}}_F
+\eeqal
+Combining with~\ref{eq:anal2}, we have
+\beq
+\norm{\wh{\Sigma}_x\srt\Delta\wh{\Sigma}_y\srt}_F\geq \norm{\Delta_{\wt{J}}}_F\cdot\bra{ \sqrt{\lam_{\min}^{\wh{\Sigma}_x}(s_1s_2+t)\lam_{\min}^{\wh{\Sigma}_y}(s_1s_2+t)}-3\sqrt{\frac{s_1s_2}{t}} \sqrt{\lam_{\max}^{\wh{\Sigma}_x}(t)\lam_{\max}^{\wh{\Sigma}_y}(t)}} 
+\eeq
+Note that because
+\beq
+\norm{\Delta_{\wt{J}\com}}_F\leq \sum_{k=2}^K\norm{\Delta_{J_k}}_F\leq 3\sqrt{\frac{s_1s_2}{t}}\norm{\Delta_{\wt{J}}}_F
+\eeq
+we have
+\beq
+\norm{\Delta}_F\leq \norm{\Delta_{\wt{J}}}_F+\norm{\Delta_{\wt{J}\com}}_F\leq \bra{1+3\sqrt{\frac{s_1s_2}{t}}}\norm{\Delta_{\wt{J}}}_F
+\eeq
+Thus
+\beq
+\norm{\wh{\Sigma}_x\srt\Delta\wh{\Sigma}_y\srt}_F\geq \norm{\Delta}_F\cdot\bra{\frac{ \sqrt{\lam_{\min}^{\wh{\Sigma}_x}(s_1s_2+t)\lam_{\min}^{\wh{\Sigma}_y}(s_1s_2+t)}-3\sqrt{\frac{s_1s_2}{t}} \sqrt{\lam_{\max}^{\wh{\Sigma}_x}(t)\lam_{\max}^{\wh{\Sigma}_y}(t)}}{1+3\sqrt{\frac{s_1s_2}{t}}} } 
+\eeq
+So if we choose $t=Cs_1s_2$, then we could show that w.h.p.
+\beq
+\norm{\wh{\Sigma}_x\srt\Delta\wh{\Sigma}_y\srt}_F\gtrsim \norm{\Delta}_F
+\eeq
+as long as $\frac{s_1s_2\bra{\log p+\log q}}{n}$ is small. Combining with~\ref{eq:conecondition}, we now have
+\beq
+\norm{\Delta}_F^2\lesssim \frac{s_1s_2\rho^2}{\wt{\lam}^2}\lesssim \frac{s_1s_2}{\lam^2}\rho^2
+\eeq
+The rest is to choose $\rho$ such that
+\beq
+\rho \geq 2\norm{\wh{\Sigma}_{xy}-\wt{\Sigma}_{xy}}_\infty
+\eeq
+So now let's analyze $\norm{\wh{\Sigma}_{xy}-\wt{\Sigma}_{xy}}_\infty$
+\beqal
+\norm{\wh{\Sigma}_{xy}-\wt{\Sigma}_{xy}}_\infty&=\norm{\wh{\Sigma}_{xy}-\wh{\Sigma}_x(\lam\theta\eta\tp)\wh{\Sigma}_y}_\infty\\
+&\leq \norm{\wh{\Sigma}_{xy}-\Sigma_{xy}}_\infty+\norm{ \Sigma_{x}(\lam\theta\eta\tp)\Sigma_{y} - \wh{\Sigma}_x(\lam\theta\eta\tp)\wh{\Sigma}_y  }_\infty
+\eeqal
+For the first part, we easily derive the bound
+\beq
+\norm{\wh{\Sigma}_{xy}-\Sigma_{xy}}_\infty\lesssim \sqrt{\frac{\log pq}{n}}
+\eeq
+For the second part, we first divide it into three parts
+\beqal
+\norm{ \Sigma_{x}(\lam\theta\eta\tp)\Sigma_{y} - \wh{\Sigma}_x(\lam\theta\eta\tp)\wh{\Sigma}_y  }_\infty&\lesssim \underbrace{\norm{\bra{\wh{\Sigma}_x-\Sigma_x}\theta\cdot \bra{\Sigma_{y}\eta}\tp}_\infty}_{(\text{\rom{1}})} +\underbrace{\norm{\bra{\Sigma_{x}\theta }\cdot \left[ \bra{\wh{\Sigma}_y-\Sigma_y}\eta\right]\tp}}_{(\text{\rom{2}})}\\
+&+\underbrace{\norm{ \bra{\wh{\Sigma}_x-\Sigma_x}\theta \cdot \left[\bra{\wh{\Sigma}_y-\Sigma_{y}}\eta\right]\tp }_\infty}_{(\text{\rom{3}})}
+\eeqal
+We will only analyze \rom{1}, the rest is the same
+\beqal
+(\text{\rom{1}})&=\norm{\bra{\wh{\Sigma}_x-\Sigma_x}\theta}_\infty\cdot\norm{\Sigma_{y}\eta}_\infty\\
+&\leq \max_{j}\ndone\sum_{i=1}^n\bra{X_{ij}X_i\tp \theta - \E X_{ij}X_i\tp \theta}\cdot \bra{\norm{\Sigma_{y}\srt \eta}_{op}\cdot \norm{\Sigma_{y}\srt \eta}}\\
+&\lesssim \sqrt{M\frac{\log p}{n}}
+\eeqal
+The first inequality is derived because $\norm{Ax}_\infty\leq \norm{Ax}\leq \norm{A}_{op}\norm{x}$.
+Now observe that
+\beq
+\log pq=\log p+\log q\asymp\log (p+q)
+\eeq
+Thus, we could choose $\rho = C\sqrt{\frac{\log (p+q)}{n}}$. Then w.h.p. we counclude that
+\beq
+\norm{\Delta}_F^2\lesssim \frac{s_1s_2\log(p+q)}{n\lam^2}
+\eeq
+Now note that
+\beq
+\norm{\wh{A}-A}_F^2\lesssim\norm{\Delta}_F^2+\norm{\wt{A}-A}_F^2
+\eeq
+And the second term in RHS, recall the definition~\ref{eq:Atilde}, we have
+\beqal
+\norm{\wt{A}-A}_F&\leq \abs{\frac{1}{\sqrt{\theta\tp\wh{\Sigma}_x}\theta\cdot \sqrt{\eta\tp\wh{\Sigma}_y}\eta}-1}\norm{\theta\eta\tp}_F\\
+&\lesssim \frac{1}{\sqrt{n}}
+\eeqal
+So we conclude with the following theorem.
+\begin{theorem}\label{thm:thm1}
+Assume that $\frac{s_1s_2\log \bra{p+q}}{n\lam^2}$ is sufficiently small, and $\wh{A}$ is one of the solution of the convex relaxation program~\ref{eq:cvxrelax}, then w.h.p.
+\beq
+\norm{\wh{A}-\theta\eta\tp}_F^2\lesssim \frac{s_1s_2\log\bra{p+q}}{n\lam^2}
+\eeq
+\end{theorem}
+Now let $\wh{\theta}$ be the leading left singular vector of $\wh{A}$, which is also the leading eigenvector of $\wh{A}\wh{A}\tp$. We first define the projection operator
+\[
+P_{v}=\frac{vv\tp}{\norm{v}^2}
+\]
+Then we see from Sine-Theta theorem
+\beq
+\norm{P_{\wh{\theta}}-P_\theta}_F^2\lesssim \norm{\wh{A}\wh{A}\tp-AA\tp}_F^2
+\eeq
+Note that
+\beqal
+\norm{\wh{A}\wh{A}\tp-AA\tp}_F&\leq \norm{\bra{\wh{A}-A}\cdot A\tp}_F+\norm{A\bra{\wh{A}-A}\tp}_F+\norm{\bra{\wh{A}-A}\cdot \bra{\wh{A}-A}\tp}_F\\
+&\leq 2\norm{A}_{op}\cdot \norm{\wh{A}-A}_F+\norm{\wh{A}-A}_F^2\\
+&\lesssim \norm{\wh{A}-A}_F
+\eeqal
+Thus
+\beq\label{eq:init}
+\norm{P_{\wh{\theta}}-P_\theta}_F^2\lesssim\frac{s_1s_2\log\bra{p+q}}{n\lam^2}
+\eeq
+\section{Improvements}
+Let's not be satisfied with the error rate in~\ref{thm:thm1} and try to do some improvements as in~\cite{Ma_2013}. We first do the regression characterization.
+\subsection{Regression}
+Suppose we already know the true $\eta$, and we would like to do regression of $\eta\tp Y$ w.r.t. $X$, where
+\beq
+\Cov\begin{pmatrix}
+X\\Y
+\end{pmatrix}=
+\begin{pmatrix}
+\Sigma_{x}&\Sigma_{xy}\\
+\Sigma_{yx}&\Sigma_{y}\\
+\end{pmatrix}
+\eeq
+So we first investigate $\E \bra{\eta\tp Y-\beta\tp X}^2$
+\beqal
+\E \bra{\eta\tp Y-\beta\tp X}^2&=\E\left[ \bra{\eta\tp Y}^2 +\bra{\beta\tp X}^2 - 2\bra{\eta\tp Y}\bra{\beta\tp X} \right]\\
+&=\eta\tp\Sigma_{y}\eta+\beta\tp\Sigma_{x}\beta-2\beta\tp \Sigma_{xy}\eta\\
+&=\eta\tp\Sigma_{y}\eta+\beta\tp\Sigma_{x}\beta-2\lam \beta\tp \Sigma_{x}\theta\bra{\eta\tp \Sigma_{y}\eta}\\
+\eeqal
+We want to minimize this term, so we let the gradient of it equal to zero
+\beq
+\nabla_{\beta}\E \bra{\eta\tp Y-\beta\tp X}^2=2\Sigma_{x}\beta-2\lam\Sigma_{x}\theta=0
+\eeq
+And the solution to this minimization problem is
+\beq
+\beta^*=\lam \theta
+\eeq
+And if instead of knowing the true parameter $\eta$, we know $\bar{\eta}$, then the solution of the regression problem is
+\beq\label{eq:regression}
+\beta^*=\lam\bra{\eta\tp\Sigma_{y}\bar{\eta}}\theta
+\eeq
+So note that as long as the term $\eta\tp\Sigma_{y}\bar{\eta}$ is bounded away from zero, then we could normalize the vector and recover the true parameter $\theta$. This also means that the initialization of $\bar{\eta}$ does matter because in high dimensional case, there is large chance that $\Sigma_{y}\srt \eta$ and $\Sigma_{y}\srt\bar{\eta}$ are orthogonal, if we simply choose $\bar{\eta}$ randomly. But from the lecture in sparse PCA, we could use the leading (left or right) singular vector of the convex relaxation solver and then do the following iterative regression algorithm.
+\begin{algorithm}[H]
+\caption{Iterative Regression}
+\begin{algorithmic}[1]
+\Function{IterativeReg}{$X,Y,\rho_1,\rho_2,\bar{\eta}^{(0)},iter=1$}
+\For{$t\in [iter]$}
+\Let{$\theta^{(t)}$}{$\arg\min_{\theta\in\R^p}\ndone\sum\bra{Y_i\tp\bar{\eta}^{(t-1)}-X_i\tp\theta}^2+\rho_1\norm{\theta}_1$}
+\Let{$\bar{\theta}^{(t)}$}{$\frac{\theta^{(t)}}{\sqrt{\theta^{(t)\top}} \wh{\Sigma}_x\theta^{(t)}}$}
+\Let{$\eta^{(t)}$}{$\arg\min_{\eta\in\R^q}\ndone\sum\bra{X_i\tp\bar{\theta}^{(t)}- Y_i\tp{\eta}}^2+\rho_2\norm{\eta}_1$}
+\Let{$\bar{\eta}^{(t)}$}{$\frac{\eta^{(t)}}{\sqrt{\eta^{(t)\top}} \wh{\Sigma}_y\eta^{(t)}}$}
+\EndFor
+\State \Return{$\bar{\theta}^{(t)},\bar{\eta}^{(t)}$}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+And by the following analysis of the algorithm, we are going to see that we only need one iteration to achieve the minimax rate.
+\subsection{Analysis of Iterative Regression}
+Suppose we use the convex relaxation to initialize, i.e., we set $\eta^{(0)}$ as the leading right singular vector of $\wh{A}$ in~\ref{eq:cvxrelax}. And suppose $\wh{\theta}$ is the following lasso solver
+\beq
+\wh{\theta}=\arg\min_{\theta\in\R^p}\ndone\sum\bra{Y_i\tp \eta\idx{0}-X_i\tp\theta}^2+\rho\norm{\theta}_1
+\eeq
+Due to~\ref{eq:regression}, the regression is carried on towards
+\beq\label{eq:thetatilde}
+\wt{\theta}=\lam\bra{\eta\tp \Sigma_{y}\eta\idx{0}}\theta
+\eeq
+So we now write out the basic inequality
+\beq
+\ndone \sum\bra{ Y_i\tp\eta\idx{0}-X_i\tp \wh{\theta} }^2+\rho\norm{\wh{\theta}}_1\leq \ndone \sum\bra{ Y_i\tp\eta\idx{0}-X_i\tp \wt{\theta} }^2+\rho\norm{\wt{\theta}}_1
+\eeq
+Rearranging the order gives
+\beqal
+\ndone\sum\bra{X_i\tp\wh{\theta}-X_i\wt{\theta}}^2&\leq 2\abs{\ndone \sum\bra{Y_i\tp \eta\idx{0}-X_i\tp\wt{\theta} }\cdot \bra{X_i\tp \wh{\theta}-X_i\tp\wt{\theta} } }+\rho\bra{\norm{\wt{\theta}}_1-\norm{\wh{\theta}}_1 }\\
+&=2\abs{\bra{\wh{\theta}-\wt{\theta}}\tp\bra{\wh{\Sigma}_{xy}\eta\idx{0}-\wh{\Sigma}_{x}\wt{\theta} }  }+\rho\bra{\norm{\wt{\theta}}_1-\norm{\wh{\theta}}_1 }\\
+\eeqal
+Let
+\beq
+\Delta = \wh{\theta}-\wt{\theta}
+\eeq
+and using Holder's inequality, we further deduce that
+\beq
+\Delta\tp \wh{\Sigma}_x\Delta\leq 2\norm{\wh{\Sigma}_{xy}\eta\idx{0}-\wh{\Sigma}_{x}\wt{\theta}}\cdot \norm{\Delta}_1+\rho\norm{\wt{\theta}}_1-\rho\norm{\wt{\theta}+\Delta}_1
+\eeq
+Doing those tricks as we do in the proof of Lasso, we could deduce that if 
+\beq\label{eq:assump}
+\rho \geq 4\norm{\wh{\Sigma}_{xy}\eta\idx{0}-\wh{\Sigma}_x\wt{\theta}}_\infty
+\eeq
+then w.h.p.
+\mtline{
+\Delta\tp \wh{\Sigma}_x\Delta&\leq\frac{3}{2}\rho\norm{\Delta_{S_1}}_1\\
+\norm{\Delta_{S_1\com}}_1&\leq 3\norm{\Delta_{S_1}}_1\\
+\Delta\tp \wh{\Sigma}_x\Delta&\gtrsim \norm{\Delta}^2\quad\text{(peeling technique)}\\
+\norm{\Delta}^2&\lesssim s_1\rho^2
+}
+So now we only need to specify $\rho$, such that the assumption~\ref{eq:assump} holds. We analyze $\norm{\wh{\Sigma}_{xy}\eta\idx{0}-\wh{\Sigma}_x\wt{\theta}}_\infty$.
+\beq\label{eq:rhoanal}
+\norm{\wh{\Sigma}_{xy}\eta\idx{0}-\wh{\Sigma}_x\wt{\theta}}_\infty\leq \norm{\bra{\wh{\Sigma}_{xy}-\Sigma_{xy}}\eta\idx{0}}_\infty + \norm{{\Sigma}_{xy}\eta\idx{0}-{\Sigma}_x\wt{\theta}}_\infty+
+\norm{\bra{\wh{\Sigma}_x-\Sigma_x}\wt{\theta}}_\infty
+\eeq
+Recall the definition of $\wt{\theta}$~\ref{eq:thetatilde}, we know
+\beq
+{\Sigma}_{xy}\eta\idx{0}-{\Sigma}_x\wt{\theta}=\Sigma_{x}\lam\theta\eta\tp\Sigma_{y}\eta\idx{0}-\Sigma_{x}\wt{\theta}=0
+\eeq
+So the second term of~\ref{eq:rhoanal} is eliminated. Note that if use the same data of $X$ and $Y$ all along, then $\eta\idx{0}$ is dependent on $X$ and $Y$ and then the error term in~\ref{eq:rhoanal} is hard to analyze. But we could actually use the so-called sample-splitting method, which means we separate data into halves, use the first half to do the initialization and get $\eta\idx{0}$ and the rest to do iterative regression. In that case, $\eta\idx{0}$ is independent of the data in the iterative regression process and thus, the first and third term of~\ref{eq:rhoanal} is easy to analyze and we could deduce
+\beq
+\norm{\wh{\Sigma}_{xy}\eta\idx{0}-\wh{\Sigma}_x\wt{\theta}}_\infty\lesssim \sqrt{\frac{\log p}{n}}
+\eeq 
+So if we choose $\rho = C\sqrt{\frac{\log p}{n}}$, then
+\beq
+\norm{\wh{\theta}-\lam\bra{\eta\tp\Sigma_{y}\eta\idx{0}}\theta}^2\lesssim \frac{s_1\log p}{n}
+\eeq
+But this is not what we want. We first note that
+\beqal
+\norm{\frac{x}{\norm{x}}-\frac{y}{\norm{y}}}&\leq \norm{\frac{x}{\norm{x}}-\frac{x}{\norm{y}}}+\norm{\frac{x}{\norm{y}}-\frac{y}{\norm{y}}}\\
+&\leq \abs{\frac{1}{\norm{x}}-\frac{1}{\norm{y}}}\norm{x}+\frac{\norm{x-y}}{\norm{y}}\\
+&=\frac{\norm{x}-\norm{y}+\norm{x-y}}{\norm{y}}\\
+&\leq 2\frac{\norm{x-y}}{\norm{y}}
+\eeqal
+So we see that the error of two normalized vectors could be bounded using their original error. Now since $\wt{\theta}$ and $\theta$ are on the same direction, we have
+\beqal
+\min\bra{\norm{ \frac{\wh{\theta}}{\norm{\wh{\theta}}} - \frac{{\theta}}{\norm{{\theta}}} }^2, \norm{ \frac{\wh{\theta}}{\norm{\wh{\theta}}} + \frac{{\theta}}{\norm{{\theta}}} }^2}
+&=\min\bra{\norm{ \frac{\wh{\theta}}{\norm{\wh{\theta}}} - \frac{\wt{\theta}}{\norm{\wt{\theta}}} }^2, \norm{ \frac{\wh{\theta}}{\norm{\wh{\theta}}} + \frac{\wt{\theta}}{\norm{\wt{\theta}}} }^2}\\
+&\lesssim \frac{s_1\log p}{n\lam^2}\cdot \frac{1}{\bra{\eta\tp\Sigma_{y}\eta\idx{0}}^2}
+\eeqal
+We should also note that for unit vectors $u$ and $v$
+\beq
+\min\bra{\norm{u-v}^2, \norm{u+v}^2}=2\bra{1-\abs{u\tp v}}
+\eeq
+also
+\beq
+\norm{uu\tp-vv\tp}_F^2=2\bra{1-\abs{u\tp v}^2}=\min\bra{\norm{u-v}^2, \norm{u+v}^2}\bra{1+\abs{u\tp v}}
+\eeq
+Thus
+\beq
+\norm{uu\tp-vv\tp}_F^2\asymp \norm{u-v}^2
+\eeq
+So we also proved that
+\beq
+\norm{P_{\wh{\theta}} -\P_{\theta} }_F^2\lesssim \frac{s_1\log p}{n\lam^2}\cdot \frac{1}{\bra{\eta\tp\Sigma_{y}\eta\idx{0}}^2}
+\eeq
+The rest is to verify that $\eta\tp\Sigma_{y}\eta\idx{0}$ is indeed bounded away from zero if we used convex relaxation initialization. As we have already proved in~\ref{eq:init}
+\beq
+\norm{P_{\eta\idx{0}}-P_{\eta}}_F^2\lesssim \frac{s_1s_2\log\bra{p+q}}{n\lam^2}
+\eeq
+The LHS is also equal to
+\beq
+\norm{P_{\eta\idx{0}}-P_{\eta}}_F^2=2\bra{1-\abs{\eta^{(0)\top} \eta}^2}
+\eeq
+and the RHS is small because we assume that $\frac{s_1s_2\log\bra{p+q}}{n}$ is sufficiently small and $\lam$ is a constant. Now also note that the spectrum of $\Sigma_{y}$ is bounded below by $M\inv$, thus
+\beq
+\abs{\eta\tp \Sigma\eta\idx{0}}\geq \lam_{\min}^{\Sigma_{y}}\norm{\eta\tp\eta\idx{0}}\geq M\inv \norm{\eta\tp\eta\idx{0}}
+\eeq
+So now we could conclude with the following theorem
+\begin{theorem}
+Assume that $\frac{s_1s_2\log\bra{p+q}}{n\lam^2}$ is sufficiently small, then by using the two-stage algorithm with sample splitting, i.e., to use the first half of data to do the convex relaxation and initialize the setting, and use the rest to do the iterative regression (with one iteration), we achieve the minimax rate
+\beq
+\norm{P_{\wh{\theta}} -\P_{\theta} }_F^2\lesssim \frac{s_1\log p}{n\lam^2}
+\eeq
+\end{theorem}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\bibliographystyle{apalike}
+\bibliography{SparseCCA.bib}	
+%%%%%%%%%%% end of doc
+\end{document}
