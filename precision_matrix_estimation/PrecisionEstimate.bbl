@@ -1,0 +1,13 @@
+\begin{thebibliography}{}
+
+\bibitem[Cai et~al., 2012]{cai2012estimating}
+Cai, T.~T., Liu, W., and Zhou, H.~H. (2012).
+\newblock Estimating sparse precision matrix: Optimal rates of convergence and
+  adaptive estimation.
+
+\bibitem[Meinshausen and Bühlmann, 2006]{Meinshausen_2006}
+Meinshausen, N. and Bühlmann, P. (2006).
+\newblock High-dimensional graphs and variable selection with the lasso.
+\newblock {\em The Annals of Statistics}, 34(3):1436–1462.
+
+\end{thebibliography}

@@ -1,0 +1,415 @@
+\documentclass[12pt]{article}
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{scribe}
+\usepackage{listings}
+
+\usepackage{hyperref}
+\usepackage{cleveref}
+%\usepackage[style=authoryear]{biblatex}
+\renewcommand{\Pr}{{\bf Pr}}
+\newcommand{\Prx}{\mathop{\bf Pr\/}}
+\newcommand{\E}{{\bf E}}
+\newcommand{\Ex}{\mathop{\bf E\/}}
+\newcommand{\Var}{{\bf Var}}
+\newcommand{\Varx}{\mathop{\bf Var\/}}
+\newcommand{\Cov}{{\bf Cov}}
+\newcommand{\Cor}{{\bf Corr}}
+\newcommand{\Covx}{\mathop{\bf Cov\/}}
+\newcommand{\rank}{\text{rank}}
+
+% shortcuts for symbol names that are too long to type
+\newcommand{\eps}{\epsilon}
+\newcommand{\lam}{\lambda}
+\renewcommand{\l}{\ell}
+\newcommand{\la}{\langle}
+\newcommand{\ra}{\rangle}
+%\newcommand{\wh}{\widehat}
+
+% "blackboard-fonted" letters for the reals, naturals etc.
+\newcommand{\R}{\mathbb R}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\F}{\mathbb F}
+\newcommand{\Q}{\mathbb Q}
+%\newcommand{\C}{\mathbb C}
+\DeclareMathOperator{\Tr}{Tr}
+
+% operators that should be typeset in Roman font
+\newcommand{\poly}{\mathrm{poly}}
+\newcommand{\polylog}{\mathrm{polylog}}
+\newcommand{\sgn}{\mathrm{sgn}}
+\newcommand{\avg}{\mathop{\mathrm{avg}}}
+\newcommand{\val}{{\mathrm{val}}}
+
+% complexity classes
+\renewcommand{\P}{\mathrm{P}}
+\newcommand{\NP}{\mathrm{NP}}
+\newcommand{\BPP}{\mathrm{BPP}}
+\newcommand{\DTIME}{\mathrm{DTIME}}
+\newcommand{\ZPTIME}{\mathrm{ZPTIME}}
+\newcommand{\BPTIME}{\mathrm{BPTIME}}
+\newcommand{\NTIME}{\mathrm{NTIME}}
+
+% values associated to optimization algorithm instances
+\newcommand{\Opt}{{\mathsf{Opt}}}
+\newcommand{\Alg}{{\mathsf{Alg}}}
+\newcommand{\Lp}{{\mathsf{Lp}}}
+\newcommand{\Sdp}{{\mathsf{Sdp}}}
+\newcommand{\Exp}{{\mathsf{Exp}}}
+
+% if you think the sum and product signs are too big in your math mode; x convention
+% as in the probability operators
+\newcommand{\littlesum}{{\textstyle \sum}}
+\newcommand{\littlesumx}{\mathop{{\textstyle \sum}}}
+\newcommand{\littleprod}{{\textstyle \prod}}
+\newcommand{\littleprodx}{\mathop{{\textstyle \prod}}}
+
+% horizontal line across the page
+\newcommand{\horz}{
+\vspace{-.4in}
+\begin{center}
+\begin{tabular}{p{\textwidth}}\\
+\hline
+\end{tabular}
+\end{center}
+}
+
+% calligraphic letters
+\newcommand{\calA}{{\cal A}}
+\newcommand{\calB}{{\cal B}}
+\newcommand{\calC}{{\cal C}}
+\newcommand{\calD}{{\cal D}}
+\newcommand{\calE}{{\cal E}}
+\newcommand{\indep}{\rotatebox[origin=c]{90}{$\models$}}
+\newcommand{\calF}{{\cal F}}
+\newcommand{\calG}{{\cal G}}
+\newcommand{\calH}{{\cal H}}
+\newcommand{\calI}{{\cal I}}
+\newcommand{\calJ}{{\cal J}}
+\newcommand{\calK}{{\cal K}}
+\newcommand{\calL}{{\cal L}}
+\newcommand{\calM}{{\cal M}}
+\newcommand{\calN}{{\cal N}}
+\newcommand{\calO}{{\cal O}}
+\newcommand{\calP}{{\cal P}}
+\newcommand{\calQ}{{\cal Q}}
+\newcommand{\calR}{{\cal R}}
+\newcommand{\calS}{{\cal S}}
+\newcommand{\calT}{{\cal T}}
+\newcommand{\calU}{{\cal U}}
+\newcommand{\calV}{{\cal V}}
+\newcommand{\calW}{{\cal W}}
+\newcommand{\calX}{{\cal X}}
+\newcommand{\calY}{{\cal Y}}
+\newcommand{\calZ}{{\cal Z}}
+\newcommand{\com}{^\complement}
+\newcommand{\inv}{^{-1}}
+\newcommand{\tp}{^\top}
+% bold letters (useful for random variables)
+\renewcommand{\a}{{\boldsymbol a}}
+\renewcommand{\b}{{\boldsymbol b}}
+\renewcommand{\c}{{\boldsymbol c}}
+\renewcommand{\d}{{\boldsymbol d}}
+\newcommand{\e}{{\boldsymbol e}}
+\newcommand{\f}{{\boldsymbol f}}
+\newcommand{\g}{{\boldsymbol g}}
+\newcommand{\h}{{\boldsymbol h}}
+\renewcommand{\i}{{\boldsymbol i}}
+\renewcommand{\j}{{\boldsymbol j}}
+\renewcommand{\k}{{\boldsymbol k}}
+\newcommand{\m}{{\boldsymbol m}}
+\newcommand{\n}{{\boldsymbol n}}
+\renewcommand{\o}{{\boldsymbol o}}
+\newcommand{\p}{{\boldsymbol p}}
+\newcommand{\q}{{\boldsymbol q}}
+\renewcommand{\r}{{\boldsymbol r}}
+\newcommand{\s}{{\boldsymbol s}}
+\renewcommand{\t}{{\boldsymbol t}}
+\renewcommand{\u}{{\boldsymbol u}}
+\renewcommand{\v}{{\boldsymbol v}}
+\newcommand{\w}{{\boldsymbol w}}
+\newcommand{\x}{{\boldsymbol x}}
+\newcommand{\y}{{\boldsymbol y}}
+\newcommand{\z}{{\boldsymbol z}}
+\newcommand{\A}{{\boldsymbol A}}
+\newcommand{\B}{{\boldsymbol B}}
+\newcommand{\D}{{\boldsymbol D}}
+%\newcommand{\G}{{\boldsymbol G}}
+\renewcommand{\H}{{\boldsymbol H}}
+\newcommand{\I}{{\boldsymbol I}}
+\newcommand{\J}{{\boldsymbol J}}
+\newcommand{\K}{{\boldsymbol K}}
+\renewcommand{\L}{{\boldsymbol L}}
+\newcommand{\M}{{\boldsymbol M}}
+\renewcommand{\O}{{\boldsymbol O}}
+\renewcommand{\S}{{\boldsymbol S}}
+\newcommand{\T}{{\boldsymbol T}}
+%\newcommand{\U}{{\boldsymbol U}}
+\newcommand{\V}{{\boldsymbol V}}
+\newcommand{\W}{{\boldsymbol W}}
+\newcommand{\X}{{\boldsymbol X}}
+\newcommand{\Y}{{\boldsymbol Y}}
+\newcommand{\bra}[1]{\left(#1\right)}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\innprod}[1]{\left\langle#1\right\rangle}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\wh}[1]{\widehat{#1}}
+\newcommand{\wt}[1]{\widetilde{#1}}
+\def\beq{\begin{equation}}
+\def\eeq{\end{equation}}
+\def\bal{\begin{aligned}}
+\def\eal{\end{aligned}}
+\def\beqal{\begin{equation}\begin{aligned}}
+\def\eeqal{\end{aligned}\end{equation}}
+\newcommand{\brkt}[1]{\left\{#1\right\}}
+\newcommand{\mtline}[1]{\beq
+\left\{
+\bal
+#1
+\eal
+\right.
+\eeq}
+
+
+% useful for Fourier analysis
+\newcommand{\bits}{\{-1,1\}}
+\newcommand{\bitsn}{\{-1,1\}^n}
+\newcommand{\bn}{\bitsn}
+\newcommand{\isafunc}{{: \bitsn \rightarrow \bits}}
+\newcommand{\fisafunc}{{f : \bitsn \rightarrow \bits}}
+\newcommand{\ndone}{\frac{1}{n}}
+
+\makeatletter
+\newcommand{\distas}[1]{\mathbin{\overset{#1}{\kern\z@\sim}}}%
+\newsavebox{\mybox}\newsavebox{\mysim}
+\newcommand{\distras}[1]{%
+  \savebox{\mybox}{\hbox{\kern3pt$\scriptstyle#1$\kern3pt}}%
+  \savebox{\mysim}{\hbox{$\sim$}}%
+  \mathbin{\overset{#1}{\kern\z@\resizebox{\wd\mybox}{\ht\mysim}{$\sim$}}}%
+}
+\makeatother
+\newcommand{\iid}{\distras{\text{i.i.d.}}}
+\makeatletter
+\newcommand*{\rom}[1]{\expandafter\@slowromancap\romannumeral #1@}
+\makeatother
+
+% if you want
+\newcommand{\half}{{\textstyle \frac12}}
+
+\newcommand{\myfig}[4]{\begin{figure}[h] \begin{center} \includegraphics[width=#1\textwidth]{#2} \caption{#3} \label{#4} \end{center} \end{figure}} 
+\newcommand{\chara}{\mathbb{1}}
+
+\Scribe{Xinze Li}
+\Lecturer{Chao Gao}
+\LectureNumber{07}
+\LectureDate{Jan 29, 2020}
+\LectureTitle{Precision Matrix Estimation}
+
+\lstset{style=mystyle}
+
+
+
+\begin{document}
+	\MakeScribeTop
+\section{Precision Matrix Estimator}
+\subsection{Problem Formulation}
+First suppose that $X_1,\cdots, X_n\iid \calN(0, \Sigma)$ and that $\Omega=\Sigma\inv$ is the precision matrix. We also assume the parameter space $\calG(p,s,m)$ as
+\beq\label{eq:parameterspace}
+\calG(p,s,m)=\left\{ 
+\Omega:M\inv\leq\lam_{\min}(\Omega)\leq \lam_{\max}(\Omega)\leq M,\max_i\sum_{j=1}^p\chara(\Omega_{ij}\ne0)\leq s
+\right\}
+\eeq
+Suppose $x_1\in \R^{p_1}$, $x_2\in\R^{p_2}$, and $p_1+p_2=p$
+\beq
+X=
+\begin{pmatrix}
+x_1\\
+x_2
+\end{pmatrix}
+\sim 
+\calN\bra{0, \begin{pmatrix}
+\Sigma_{11}&\Sigma_{12}\\
+\Sigma_{21}&\Sigma_{22}\\
+\end{pmatrix}}
+=
+\calN\bra{0, \begin{pmatrix}
+\Omega_{11}&\Omega_{12}\\
+\Omega_{21}&\Omega_{22}\\
+\end{pmatrix}^{-1}}
+\eeq
+And so we have the \href{https://stats.stackexchange.com/questions/30588/deriving-the-conditional-distributions-of-a-multivariate-normal-distribution}{conditional probability distribution} as follows
+\beq
+x_1|x_2\sim\calN\bra{-\Sigma_{12}\Sigma_{22}\inv x_2, \Sigma_{11}-\Sigma_{12}\Sigma_{22}\inv \Sigma_{21}}
+\eeq
+Now let $S=\Sigma_{11}-\Sigma_{12}\Sigma_{22}\inv \Sigma_{21}$ the Schur complement. From matrix theory, we know
+\beq
+\begin{pmatrix}
+\Omega_{11}&\Omega_{12}\\
+\Omega_{21}&\Omega_{22}\\
+\end{pmatrix}=
+\begin{pmatrix}
+\Sigma_{11}&\Sigma_{12}\\
+\Sigma_{21}&\Sigma_{22}\\
+\end{pmatrix}\inv=
+\begin{pmatrix}
+S\inv&-S\inv \Sigma_{11}\Sigma_{22}\inv\\
+*&*\\
+\end{pmatrix}
+\eeq
+Thus we also have
+\beq
+x_1|x_2\sim\calN\bra{-\Omega_{11}^{-1}\Omega_{12}x_2, \Omega_{11}^{-1}}
+\eeq
+We denote $x_{-i}=x_{[p]\textbackslash i}\in\R^{p-1}$, and so
+\beq\label{eq:condprob}
+x_1|x_{-1}\sim \calN\bra{-\Omega_{11}\inv \Omega_{1,-1}x_{-1}, \Omega_{11}\inv}
+\eeq
+\subsection{Idea}
+Now the idea is to apply Lasso to estimate each column of the precision matrix $\Omega$ (See the article~\cite{Meinshausen_2006}). Now recall that in Lasso, we assume that $y=X\beta+\sigma z$, and $z\sim \calN(0, I_n)$, $X\in \R^{n\times p}$. The goal is to recover both $\beta$ and $\theta$. Suppose $X=\bra{X_1,\cdots,X_n}\tp$, and that $X_1,\cdots,X_n\iid \calN(0,\Sigma)$. If we also assume that $\frac{s\log p}{n}$ is small and
+\beq\label{eq:assump}
+M\inv\leq \lam_{\min}(\Sigma)\leq\lam_{\max}(\Sigma)\leq M, \quad \sigma^2\leq M,\quad \beta\in\Theta(p,s)
+\eeq
+And that $\wh{\beta}$ is the Lasso estimator
+\beq
+\wh{\beta}=\arg\min_{\beta}\norm{y-X\beta}^2+\lam\norm{\beta}_1
+\eeq
+If we choose 
+\beq
+\lam=C\sqrt{n\log p}
+\eeq
+We then have
+\beq
+\left\{
+\bal
+\ndone\norm{X\bra{\wh{\beta}-\beta}}^2&\lesssim \frac{s\log p}{n\kappa^2}\\
+\norm{\wh{\beta}-\beta}^2&\lesssim \frac{s\log p}{n\kappa^4}
+\eal
+\right.
+\eeq
+And if we have the above assumption, we could actually obtain $\kappa \gtrsim 1$. So we have
+\beq\label{eq:lassoproperty}
+\left\{
+\bal
+\ndone\norm{X\bra{\wh{\beta}-\beta}}^2&\lesssim \frac{s\log p}{n}\\
+\norm{\wh{\beta}-\beta}^2&\lesssim \frac{s\log p}{n}
+\eal
+\right.
+\eeq
+Now using the cone condition
+\beq
+\norm{\wh{\beta}-\beta}_1=\norm{\Delta_S}_1+\norm{\Delta_{S\com}}_1\leq 4\norm{\Delta_S}_1\leq 4\sqrt{s}\norm{\Delta}\leq 4\sqrt{s}\norm{\wh{\beta}-\beta}
+\eeq
+And thus
+\beq
+\norm{\wh{\beta}-\beta}_1\lesssim s\sqrt{\frac{\log p}{n}}
+\eeq
+Now from \ref{eq:condprob}, we know that if we write
+\beq\label{eq:set1}
+x_1=\begin{pmatrix}
+X_{11}\\
+\vrule\\
+X_{n1}
+\end{pmatrix}\in \R^{n\times 1},\quad
+x_{-1}=\begin{pmatrix}
+X_{1,-1}\\ \vrule \\ X_{n,-1}
+\end{pmatrix}\in \R^{n\times (p-1)}
+\eeq
+then we have
+\beq
+x_1=-\Omega_{11}\inv x_{-1}\tp \Omega_{-1,1}+\Omega_{11}^{-\frac{1}{2}}z, \quad z\sim \calN(0,I_{n}),\quad \Omega_{11}\in \R,\quad \Omega_{-1,1}\in\R^{(p-1)\times 1}
+\eeq
+And so we could do the following Lasso estimator
+\mtline{
+\wh{\beta}&=\arg\min_{\beta\in\R^{p-1}}\norm{x_1-x_{-1}\tp \beta}^2+\lam \norm{\beta}_1\\
+\wh{\sigma}^2&=\ndone \norm{x_1-x_{-1}\tp \beta}^2}
+Now we are ready to give the estimate of the first column of the precision matrix
+\mtline{\label{eq:estimator}
+\wh{\Omega}_{11}&=\frac{1}{\wh{\sigma}^2}\\
+\wh{\Omega}_{-1,1}&=\frac{\wh{\beta}}{\wh{\sigma}^2}\\
+}
+\subsection{Analysis}
+To do the analysis, we should first check that all the assumptions are satisfied. From \ref{eq:set1}, we know that $X_{1,-1},\cdots, X_{n,-1}\iid \calN(0,\Omega_{-1,-1}\inv)$, and here $\sigma^2=\Omega_{11}\inv$, $\beta=-\Omega_{11}\inv \Omega_{-1,1}$. Now since we assume in ~\ref{eq:parameterspace}, we know that 
+\beq
+M\inv \leq \lam_{\min}\bra{\Omega}\leq \lam_{\min}\bra{\Omega_{-1,-1}}\leq \lam_{\max}\bra{\Omega_{-1,-1}}\leq \lam_{\max}\bra{\Omega}\leq M
+\eeq
+But $\lam_{\max}\bra{\Omega_{-1,-1}\inv}=1/\lam_{\min}(\Omega_{-1,-1})$, and $\lam_{\min}\bra{\Omega_{-1,-1}\inv}=1/\lam_{\max}(\Omega_{-1,-1})$. Thus
+\beq
+M\inv \leq \lam_{\min}(\Omega_{-1,-1}\inv)\leq \lam_{\max}(\Omega_{-1,-1}\inv)\leq M
+\eeq
+By the same logic
+\beq
+M\inv\leq \sigma^2\leq M
+\eeq
+Also since $\sum \chara(\Omega_{1i}\ne 0)\leq s$, and $\Omega$ is symmetric, we have $\beta\in \Theta(p-1, s)$. Thus the assumptions ~\ref{eq:assump} are met. Now we are ready to do our analysis. First let's analyze $\abs{\wh{\sigma}^2-\sigma^2}$,
+\beqal
+\abs{\wh{\sigma}^2-\sigma^2}&=\abs{ \ndone\norm{X\bra{\beta-\wh{\beta}}+\sigma z} -\sigma^2 }\\
+&\leq \ndone\norm{X(\beta-\wh{\beta})}^2+\sigma^2\abs{\frac{\norm{z}^2}{n}-1}+\frac{2\sigma}{n}\abs{z\tp X(\beta-\wh{\beta})}\\
+&\lesssim \frac{s\log p}{n}+\sqrt{\frac{\log p}{n}}+\frac{2\sigma}{n}\norm{X\tp z}_\infty\cdot \norm{\beta-\wh{\beta}}_1\\
+&\lesssim \frac{s\log p}{n}+\sqrt{\frac{\log p}{n}}+\frac{2\sigma}{n}\sqrt{n\log p}\cdot s\sqrt{\frac{\log p}{n}}\\
+&\lesssim \frac{s\log p}{n}+\sqrt{\frac{\log p}{n}}
+\eeqal
+The second inequality is Lasso's property~\ref{eq:lassoproperty}, concentration of chi-square and Holder's inequality. The third inequality is union bound and Lasso's property~\ref{eq:lassoproperty}. Thus, w.h.p. the following holds
+\beq\label{eq:anal1}
+\abs{\wh{\sigma}^2-\sigma^2}\lesssim \frac{s\log p}{n}+\sqrt{\frac{\log p}{n}}
+\eeq
+And now we could analyze the error of the precision matrix estimator ~\ref{eq:estimator}
+\beqal
+\abs{\wh{\Omega}_{11}-\Omega_{11}}&=\abs{\frac{1}{\sigma^2}-\frac{1}{\wh{\sigma}^2}}\\
+&=\frac{\abs{\wh{\sigma}^2-\sigma^2}}{\sigma^2\wh{\sigma}^2}\\
+&\lesssim \abs{\wh{\sigma}^2-\sigma^2}\\&\lesssim\frac{s\log p}{n}+\sqrt{\frac{\log p}{n}}
+\eeqal
+The first inequality is because $\sigma^2\geq M\inv$. Also, $\wh{\sigma}^2$ and $\sigma^2$ are close due to~\ref{eq:anal1}. Thus, $\sigma^2\wh{\sigma}^2\gtrsim 1$.
+\beqal
+\norm{\wh{\Omega}_{-1,1}-\Omega_{-1,1}}_1&=\norm{\frac{\wh{\beta}}{\wh{\sigma}^2}-\frac{\beta}{\sigma^2}}\\
+&\leq \norm{\frac{\wh{\beta}}{\wh{\sigma}^2}-\frac{\beta}{\wh{\sigma}^2}}_1+\norm{\frac{\beta}{\wh{\sigma}^2}-\frac{\beta}{\sigma^2}}_1\\
+&=\frac{1}{\wh{\sigma}^2}\norm{\wh{\beta}-\beta}_1+\norm{\beta}_1\abs{\frac{1}{\wh{\sigma}^2}-\frac{1}{\sigma}^2}\\
+&\lesssim s\sqrt{\frac{\log p}{n}}+\sqrt{s}\cdot \bra{\frac{s\log p}{n}+\sqrt{\frac{\log p}{n}}}\\
+&\lesssim s\sqrt{\frac{\log p}{n}}
+\eeqal
+Note that we used the estimate $\norm{\beta}_1\lesssim \sqrt{s}$ in the second inequality. This is valid because
+\beqal
+\norm{\beta}_1&\leq \sqrt{s}\norm{\beta}\\&=\sqrt{s}\norm{\sigma^2\Omega_{-1,1}}\\
+&\lesssim \sqrt{s}\sigma^2\norm{\Omega}\\&=\sqrt{s}\sigma^2\lam_{\max}\\
+&\lesssim \sqrt{s}
+\eeqal
+Thus we have
+\beq
+\Pr\bra{ \norm{\wh{\Omega}_{*1}-\Omega_{*1}}_1 > Cs\sqrt{\log p /n} }\leq p^{-10}
+\eeq
+Using union bound, we have
+\beq
+\Pr\bra{ \max_{1\leq j\leq p}\norm{\wh{\Omega}_{*j}-\Omega_{*j}}_1 > Cs\sqrt{\log p /n} }\leq p^{-9}
+\eeq
+Thus the following holds w.h.p.
+\beq
+\norm{\wh{\Omega}-\Omega}_{op}^2\leq \norm{\wh{\Omega}-\Omega}_1^2\lesssim \frac{s^2\log p}{n}
+\eeq
+which is also the optimal rate (See~\cite{cai2012estimating})
+\beq
+\inf_{\wh{\Omega}}\sup_{\Omega\in\calG(p,s,m)}\E \norm{\wh{\Omega}-\Omega}_{op}^2\gtrsim \frac{s^2\log p}{n}
+\eeq
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\bibliographystyle{apalike}
+\bibliography{PrecisionEstimate.bib}	
+%%%%%%%%%%% end of doc
+\end{document}
