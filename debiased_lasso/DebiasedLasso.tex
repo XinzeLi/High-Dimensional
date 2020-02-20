@@ -1,0 +1,328 @@
+\documentclass[12pt]{article}
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{scribe}
+\usepackage{listings}
+
+\usepackage{hyperref}
+\usepackage{cleveref}
+%\usepackage[style=authoryear]{biblatex}
+\renewcommand{\Pr}{{\bf Pr}}
+\newcommand{\Prx}{\mathop{\bf Pr\/}}
+\newcommand{\E}{{\bf E}}
+\newcommand{\Ex}{\mathop{\bf E\/}}
+\newcommand{\Var}{{\bf Var}}
+\newcommand{\Varx}{\mathop{\bf Var\/}}
+\newcommand{\Cov}{{\bf Cov}}
+\newcommand{\Covx}{\mathop{\bf Cov\/}}
+
+% shortcuts for symbol names that are too long to type
+\newcommand{\eps}{\epsilon}
+\newcommand{\lam}{\lambda}
+\renewcommand{\l}{\ell}
+\newcommand{\la}{\langle}
+\newcommand{\ra}{\rangle}
+%\newcommand{\wh}{\widehat}
+
+% "blackboard-fonted" letters for the reals, naturals etc.
+\newcommand{\R}{\mathbb R}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\F}{\mathbb F}
+\newcommand{\Q}{\mathbb Q}
+%\newcommand{\C}{\mathbb C}
+\DeclareMathOperator{\Tr}{Tr}
+
+% operators that should be typeset in Roman font
+\newcommand{\poly}{\mathrm{poly}}
+\newcommand{\polylog}{\mathrm{polylog}}
+\newcommand{\sgn}{\mathrm{sgn}}
+\newcommand{\avg}{\mathop{\mathrm{avg}}}
+\newcommand{\val}{{\mathrm{val}}}
+
+% complexity classes
+\renewcommand{\P}{\mathrm{P}}
+\newcommand{\NP}{\mathrm{NP}}
+\newcommand{\BPP}{\mathrm{BPP}}
+\newcommand{\DTIME}{\mathrm{DTIME}}
+\newcommand{\ZPTIME}{\mathrm{ZPTIME}}
+\newcommand{\BPTIME}{\mathrm{BPTIME}}
+\newcommand{\NTIME}{\mathrm{NTIME}}
+
+% values associated to optimization algorithm instances
+\newcommand{\Opt}{{\mathsf{Opt}}}
+\newcommand{\Alg}{{\mathsf{Alg}}}
+\newcommand{\Lp}{{\mathsf{Lp}}}
+\newcommand{\Sdp}{{\mathsf{Sdp}}}
+\newcommand{\Exp}{{\mathsf{Exp}}}
+
+% if you think the sum and product signs are too big in your math mode; x convention
+% as in the probability operators
+\newcommand{\littlesum}{{\textstyle \sum}}
+\newcommand{\littlesumx}{\mathop{{\textstyle \sum}}}
+\newcommand{\littleprod}{{\textstyle \prod}}
+\newcommand{\littleprodx}{\mathop{{\textstyle \prod}}}
+
+% horizontal line across the page
+\newcommand{\horz}{
+\vspace{-.4in}
+\begin{center}
+\begin{tabular}{p{\textwidth}}\\
+\hline
+\end{tabular}
+\end{center}
+}
+
+% calligraphic letters
+\newcommand{\calA}{{\cal A}}
+\newcommand{\calB}{{\cal B}}
+\newcommand{\calC}{{\cal C}}
+\newcommand{\calD}{{\cal D}}
+\newcommand{\calE}{{\cal E}}
+\newcommand{\indep}{\rotatebox[origin=c]{90}{$\models$}}
+\newcommand{\calF}{{\cal F}}
+\newcommand{\calG}{{\cal G}}
+\newcommand{\calH}{{\cal H}}
+\newcommand{\calI}{{\cal I}}
+\newcommand{\calJ}{{\cal J}}
+\newcommand{\calK}{{\cal K}}
+\newcommand{\calL}{{\cal L}}
+\newcommand{\calM}{{\cal M}}
+\newcommand{\calN}{{\cal N}}
+\newcommand{\calO}{{\cal O}}
+\newcommand{\calP}{{\cal P}}
+\newcommand{\calQ}{{\cal Q}}
+\newcommand{\calR}{{\cal R}}
+\newcommand{\calS}{{\cal S}}
+\newcommand{\calT}{{\cal T}}
+\newcommand{\calU}{{\cal U}}
+\newcommand{\calV}{{\cal V}}
+\newcommand{\calW}{{\cal W}}
+\newcommand{\calX}{{\cal X}}
+\newcommand{\calY}{{\cal Y}}
+\newcommand{\calZ}{{\cal Z}}
+
+% bold letters (useful for random variables)
+\renewcommand{\a}{{\boldsymbol a}}
+\renewcommand{\b}{{\boldsymbol b}}
+\renewcommand{\c}{{\boldsymbol c}}
+\renewcommand{\d}{{\boldsymbol d}}
+\newcommand{\e}{{\boldsymbol e}}
+\newcommand{\f}{{\boldsymbol f}}
+\newcommand{\g}{{\boldsymbol g}}
+\newcommand{\h}{{\boldsymbol h}}
+\renewcommand{\i}{{\boldsymbol i}}
+\renewcommand{\j}{{\boldsymbol j}}
+\renewcommand{\k}{{\boldsymbol k}}
+\newcommand{\m}{{\boldsymbol m}}
+\newcommand{\n}{{\boldsymbol n}}
+\renewcommand{\o}{{\boldsymbol o}}
+\newcommand{\p}{{\boldsymbol p}}
+\newcommand{\q}{{\boldsymbol q}}
+\renewcommand{\r}{{\boldsymbol r}}
+\newcommand{\s}{{\boldsymbol s}}
+\renewcommand{\t}{{\boldsymbol t}}
+\renewcommand{\u}{{\boldsymbol u}}
+\renewcommand{\v}{{\boldsymbol v}}
+\newcommand{\w}{{\boldsymbol w}}
+\newcommand{\x}{{\boldsymbol x}}
+\newcommand{\y}{{\boldsymbol y}}
+\newcommand{\z}{{\boldsymbol z}}
+\newcommand{\A}{{\boldsymbol A}}
+\newcommand{\B}{{\boldsymbol B}}
+\newcommand{\D}{{\boldsymbol D}}
+%\newcommand{\G}{{\boldsymbol G}}
+\renewcommand{\H}{{\boldsymbol H}}
+\newcommand{\I}{{\boldsymbol I}}
+\newcommand{\J}{{\boldsymbol J}}
+\newcommand{\K}{{\boldsymbol K}}
+\renewcommand{\L}{{\boldsymbol L}}
+\newcommand{\M}{{\boldsymbol M}}
+\renewcommand{\O}{{\boldsymbol O}}
+\renewcommand{\S}{{\boldsymbol S}}
+\newcommand{\T}{{\boldsymbol T}}
+%\newcommand{\U}{{\boldsymbol U}}
+\newcommand{\V}{{\boldsymbol V}}
+\newcommand{\W}{{\boldsymbol W}}
+\newcommand{\X}{{\boldsymbol X}}
+\newcommand{\Y}{{\boldsymbol Y}}
+\newcommand{\bra}[1]{\left(#1\right)}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\innprod}[1]{\left\langle#1\right\rangle}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\wh}[1]{\widehat{#1}}
+\newcommand{\wt}[1]{\widetilde{#1}}
+\def\beq{\begin{equation}}
+\def\eeq{\end{equation}}
+\def\bal{\begin{aligned}}
+\def\eal{\end{aligned}}
+\def\beqal{\begin{equation}\begin{aligned}}
+\def\eeqal{\end{aligned}\end{equation}}
+
+
+% useful for Fourier analysis
+\newcommand{\bits}{\{-1,1\}}
+\newcommand{\bitsn}{\{-1,1\}^n}
+\newcommand{\bn}{\bitsn}
+\newcommand{\isafunc}{{: \bitsn \rightarrow \bits}}
+\newcommand{\fisafunc}{{f : \bitsn \rightarrow \bits}}
+
+% if you want
+\newcommand{\half}{{\textstyle \frac12}}
+
+\newcommand{\myfig}[4]{\begin{figure}[h] \begin{center} \includegraphics[width=#1\textwidth]{#2} \caption{#3} \label{#4} \end{center} \end{figure}} 
+
+\Scribe{Xinze Li}
+\Lecturer{Chao Gao}
+\LectureNumber{08}
+\LectureDate{Feb 03, 2020}
+\LectureTitle{Debiased Lasso}
+
+\lstset{style=mystyle}
+
+
+
+\begin{document}
+	\MakeScribeTop
+
+%#############################################################
+%#############################################################
+%#############################################################
+%#############################################################
+
+In previous lectures, we obtain estimators of precision matrix. Now it's time for us to do inference, which is a harder problem.
+\section{Debiased Lasso}
+First suppose that 
+\beq
+y=X\beta +z,\quad z\sim \calN(0,I_n)
+\eeq
+Also suppose that $X=\bra{X_1,\cdots,X_n}^\top$, $X_i\in\R^p$ and that $X_i$ are i.i.d. drawn from multivariate normal distribution $\calN(0, \Omega^{-1})$, where $\Omega = \Sigma$ is the precision matrix. And so we could write the ordinary least square estimator if $n>p$
+\beq
+\wh{\beta}_{OLS}=\bra{X^\top X}X^\top y\sim \calN\bra{\beta, \bra{X^\top X}^{-1}}
+\eeq
+Also suppose that $\wt{\beta}$ is the Lasso estimator
+\beq
+\wt{\beta} = \arg\max_\beta \bra{\norm{y-X\beta}^2-\lam\norm{\beta}_1}
+\eeq
+We know that $\E y = X\beta$ and thus $\E X^\top y=X^\top X\beta$. And so
+\beq
+\wt{\beta}-\wh{\beta}_{OLS}=\bra{X^\top X}^{-1}\bra{X^\top X\wt{\beta}-X^\top y}
+\eeq
+is approximately the bias. A tautology from this equation is
+\beqal
+\wh{\beta}&=\wt{\beta}+\bra{X^\top X}^{-1}\bra{X^\top y-X^\top X\wt{\beta}}\\
+&=\wt{\beta}+\bra{\frac{1}{n}X^\top X}^{-1}\cdot \frac{1}{n}\bra{X^\top y-X^\top X\wt{\beta}}
+\eeqal
+So now our idea is to replace $\bra{\frac{1}{n}X^\top X}^{-1}$ by a matrix close to the precision matrix. Let's call this approximation matrix $M$, and now the in general we could write
+\beq
+\wh{\beta}=\wt{\beta}+M\cdot \frac{1}{n}\bra{X^\top y-X^\top X\wt{\beta}}
+\eeq
+This idea first appeard in the article~\cite{zhang2011confidence}. It is also rediscovered in article~\cite{javanmard2015debiasing} and \cite{van_de_Geer_2014}. The results in the latter two papers are a subset of \cite{zhang2011confidence}, which is hard to read. 
+\subsection{Known Covariance}
+If $\Sigma$ the covariance matrix is known, then a natural attempt is to plug in $M = \Omega=\Sigma^{-1}$. Suppose $\wh{\Sigma}=\frac{1}{n}X^\top X$ is the sample covariance matrix, we have
+\beqal\label{eq:anal1}
+\wh{\beta}&=\wt{\beta}+ \frac{1}{n}\Omega X^\top \bra{y-X\wt{\beta}}\\
+&=\wt{\beta}+ \frac{1}{n}\Omega X^\top \bra{X\beta +z -X\wt{\beta}}\\
+&= \wt{\beta}+ \frac{1}{n}\Omega X^\top X\beta + \frac{1}{n}\Omega X^\top z - \frac{1}{n}\Omega X^\top X\wt{\beta}\\
+&=\beta + \frac{1}{n}\Omega X^\top z+\bra{I_p-\Omega \wh{\Sigma}}\bra{\wt{\beta}-\beta}
+\eeqal
+Rearranging the order gives
+\beq\label{eq:anal2}
+\sqrt{n}\bra{\wh{\beta}-\beta}=\frac{1}{\sqrt{n}}\Omega X^\top z+\sqrt{n}\bra{I_p-\Omega \wh{\Sigma}}\bra{\wt{\beta}-\beta}
+\eeq
+Since inference is applied on each component, let's analyze each component of this vector.
+\beq\label{eq:anal3}
+\sqrt{n}\bra{\wh{\beta}_j-\beta_j}=\frac{1}{\sqrt{n}}\Omega_j^\top X^\top z+\sqrt{n}\bra{e_j-\wh{\Sigma}\Omega_j}^{\top} \cdot \bra{\wt{\beta}-\beta}
+\eeq
+Clearly the first term of the RHS is Gaussian given X. 
+\beq\label{eq:anal4}
+\frac{1}{\sqrt{n}}\Omega_j X^\top z|X \sim \calN\bra{0, \Omega_j^\top \wh{\Sigma}\Omega_j} 
+\eeq
+And for the second term, we use Holder's inequality
+\beqal\label{eq:anal}
+\abs{\sqrt{n}\bra{e_j-  \wh{\Sigma}\Omega_j}^\top \bra{\wt{\beta}-\beta}}&\leq \sqrt{n}\norm{e_j-  \wh{\Sigma}\Omega_j}_\infty\cdot \norm{\wt{\beta}-\beta}_1
+\eeqal
+For the latter part of the RHS $\norm{\wt{\beta}-\beta}_1$, we know from properties of lasso estimator that w.h.p.
+\beq\label{eq:second part}
+\norm{\wt{\beta}-\beta}_1\lesssim s\sqrt{\frac{\log p}{n}}
+\eeq
+And for the former part of RHS, we have
+\beqal\label{eq:first part}
+&\norm{e_j-  \wh{\Sigma}\Omega_j}_\infty\\
+=& \max_{1\leq l\leq p}\frac{1}{n}\abs{\sum_{i=1}^{n} \left[ \bra{\Omega_j^\top X_i}\bra{ e_l^\top X_i }- \E \bra{\Omega_j^\top X_i}\bra{ e_l^\top X_i }  \right] }\\
+\leq &\sqrt{\frac{\log p}{n}}
+\eeqal
+Details see HW5 Problem2 solution. So combining equation~\ref{eq:first part} and ~\ref{eq:second part} and plugging the bound into ~\ref{eq:anal} gives the following upper bound
+\beq
+\abs{\sqrt{n}\bra{e_j-\Omega_j^\top \wh{\Sigma}}\bra{\wt{\beta}-\beta}}\lesssim s\frac{\log p}{\sqrt{n}}
+\eeq
+Thus, if $\frac{s\log p}{\sqrt{n}}\rightarrow 0 $ and $\Omega_j^\top \wh{\Sigma}\Omega_j\gtrsim 1$ not degenerate w.h.p. (to be proved), then
+\beq
+\frac{\sqrt{n}\bra{\wh{\beta}_j-\beta_j}}{\sqrt{\Omega_j^\top \wh{\Sigma}\Omega_j}}\leadsto \calN(0,1)
+\eeq
+\subsection{Unknown Covariance}
+Following the process as in \cref{eq:anal1,eq:anal2,eq:anal3,eq:anal4,eq:anal}, suppose $M=\bra{m_1, m_2,\cdots, m_p}^\top$ and that $M$ depends only on $X$, we deduce that
+\beqal[c]
+\wh{\beta}=\beta + \frac{1}{n}M X^\top z+\bra{I_p-M \wh{\Sigma}}\bra{\wt{\beta}-\beta}\\
+\sqrt{n}\bra{\wh{\beta}-\beta}=\frac{1}{\sqrt{n}}M X^\top z+\sqrt{n}\bra{I_p-M \wh{\Sigma}}\bra{\wt{\beta}-\beta}\\
+\sqrt{n}\bra{\wh{\beta}_j-\beta_j}=\frac{1}{\sqrt{n}}m_j^\top X^\top z+\sqrt{n}\bra{e_j- \wh{\Sigma}m_j}^\top\bra{\wt{\beta}-\beta}\\
+\frac{1}{\sqrt{n}}m_j^\top X^\top z|X \sim \calN\bra{0, m_j^\top \wh{\Sigma}m_j} \\
+\abs{\sqrt{n}\bra{e_j-\wh{\Sigma}m_j}^\top\bra{\wt{\beta}-\beta}}\leq \sqrt{n}\norm{e_j-\wh{\Sigma}m_j}_\infty\cdot \norm{\wt{\beta}-\beta}_1
+\eeqal
+In order to obtain the normality, note that we should restrict $\norm{e_j-\wh{\Sigma}m_j}_\infty$ to a scale of $\sqrt{\frac{\log}{n}}$ such that $\abs{\sqrt{n}\bra{e_j- \wh{\Sigma}m_j}\bra{\wt{\beta}-\beta}}\lesssim s\frac{\log p}{\sqrt{n}}$ as before. In the same time, we would like the confidence interval be as short as possible. In order to do this, we introduce the following convex program (j is fixed)
+\beqal\label{cvx}
+\min_{m\in \R^p}& \quad m^\top \wh{\Sigma}m\\
+s.t.&\quad \norm{e_j-\wh{\Sigma}m_j}_\infty\leq C \sqrt{\frac{\log p}{n}} 
+\eeqal
+Note that this problem is certainly feasible since we have just proved that $\Omega_j$ is a feasible point in ~\ref{eq:first part}. Let $m_j$ be the solution to~\ref{cvx}, then as we previously stated, if $\frac{s\log p}{\sqrt{n}}\rightarrow 0 $ and $m_j^\top \wh{\Sigma}m_j\gtrsim 1$ not degenerate w.h.p. (to be proved), then
+\beq
+\frac{\sqrt{n}\bra{\wh{\beta}_j-\beta_j}}{\sqrt{m_j^\top \wh{\Sigma}m_j}}\leadsto \calN(0,1)
+\eeq
+Now let's prove that $m_j^\top \wh{\Sigma}m_j$ is indeed bounded away from zero. Suppose $\mu = C
+\sqrt{\frac{\log p}{n}}$. Since $\norm{e_j- \wh{\Sigma}m_j}_\infty\leq \mu $, we have
+\beq
+\abs{e_j^\top \wh{\Sigma}m_j-1}\leq \mu
+\eeq
+And so
+\beqal
+m^\top \wh{\Sigma}m&\geq m^\top \wh{\Sigma}m+ce_j^\top \wh{\Sigma}m-ce_j^\top \wh{\Sigma}m\\
+&\geq m^\top \wh{\Sigma}m+c(1-\mu)-ce_j^\top \wh{\Sigma}m\\
+\eeqal
+Taking minimum on the both sides gives
+\beqal
+\min_{\text{m feasible}}m^\top \wh{\Sigma}m&\geq c(1-\mu)+\min_{m\in \R^p}\bra{ m^\top \wh{\Sigma}m-ce_j^\top \wh{\Sigma}m}\\
+&\geq c(1-\mu)-\frac{c^2}{4}e_j^\top \wh{\Sigma}e_j\\
+&\geq \frac{\bra{1-\mu}^2 }{\wh{\Sigma}_{jj}}
+\eeqal
+Now note that $\mu = C
+\sqrt{\frac{\log p}{n}}$ is small. $\wh{\Sigma}_{jj}=\Sigma_{jj}-\bra{\wh{\Sigma}_{jj}-\Sigma_{jj}}$, $\Sigma_{jj}$ is bounded away from zero, and $\wh{\Sigma}_{jj}-\Sigma_{jj}$ is of order $O\bra{\frac{1}{\sqrt{n}}}$ goes to zero. We conclude with the following theorem
+\begin{theorem}
+If $\frac{s\log p}{\sqrt{n}}\leadsto 0$, then
+\beq
+\frac{\sqrt{n}\bra{\wh{\beta}_j-\beta_j}}{\sqrt{m_j^\top \wh{\Sigma}m_j}}\leadsto \calN(0,1)
+\eeq
+\end{theorem}
+\subsection{Estimate Noise Level}
+If $y=X\beta +\sigma z$, then we could use lasso residual (not debiased lasso) to estimate the noise level $\sigma$
+\beqal
+\wh{\sigma}^2&=\frac{1}{n}\norm{y-X\wt{\beta}}^2\\
+&=\frac{1}{n}\norm{X\beta-X\wt{\beta}+\sigma z}^2\\
+&=\frac{\sigma^2}{n}\norm{z}^2+\frac{1}{n}\norm{X\bra{\beta-\wt{\beta}}}^2+\frac{2\sigma}{n}z^\top X\bra{\beta-\wt{\beta}}
+\eeqal
+And from bound deduced in last lecture, we deduce that
+\beq
+\sqrt{n}\bra{\wh{\sigma}^2-\sigma^2}=\sigma^2\frac{1}{\sqrt{n}}\sum_{i=1}^n\bra{z_i^2-1}+O_p\bra{\frac{s\log p}{\sqrt{n}}}
+\eeq
+Note that $\sigma^2\frac{1}{\sqrt{n}}\sum_{i=1}^n\bra{z_i^2-1}\leadsto \calN\bra{0,2\sigma^4} $. Thus we have
+\beq
+\frac{\sqrt{n}\bra{\wh{\sigma}^2-\sigma^2}}{\sqrt{2}\sigma^2}\leadsto \calN(0,1)
+\eeq
+%%%%%%%%%%% If you don't have citations then comment the lines below:
+%
+
+
+\bibliographystyle{apalike}
+\bibliography{DebiasedLasso.bib}	
+%%%%%%%%%%% end of doc
+\end{document}

@@ -1,0 +1,18 @@
+\begin{thebibliography}{}
+
+\bibitem[Javanmard and Montanari, 2015]{javanmard2015debiasing}
+Javanmard, A. and Montanari, A. (2015).
+\newblock De-biasing the lasso: Optimal sample size for gaussian designs.
+
+\bibitem[van~de Geer et~al., 2014]{van_de_Geer_2014}
+van~de Geer, S., Bühlmann, P., Ritov, Y., and Dezeure, R. (2014).
+\newblock On asymptotically optimal confidence regions and tests for
+  high-dimensional models.
+\newblock {\em The Annals of Statistics}, 42(3):1166–1202.
+
+\bibitem[Zhang and Zhang, 2011]{zhang2011confidence}
+Zhang, C.-H. and Zhang, S.~S. (2011).
+\newblock Confidence intervals for low-dimensional parameters in
+  high-dimensional linear models.
+
+\end{thebibliography}
