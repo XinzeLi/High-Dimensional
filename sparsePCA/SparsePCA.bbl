@@ -1,0 +1,30 @@
+\begin{thebibliography}{}
+
+\bibitem[Berthet and Rigollet, 2013]{Berthet_2013}
+Berthet, Q. and Rigollet, P. (2013).
+\newblock Optimal detection of sparse principal components in high dimension.
+\newblock {\em The Annals of Statistics}, 41(4):1780–1815.
+
+\bibitem[Cai et~al., 2013]{Cai_2013}
+Cai, T.~T., Ma, Z., and Wu, Y. (2013).
+\newblock Sparse pca: Optimal rates and adaptive estimation.
+\newblock {\em The Annals of Statistics}, 41(6):3074–3110.
+
+\bibitem[d'Aspremont et~al., 2004]{alex2004direct}
+d'Aspremont, A., Ghaoui, L.~E., Jordan, M.~I., and Lanckriet, G. R.~G. (2004).
+\newblock A direct formulation for sparse pca using semidefinite programming.
+
+\bibitem[Johnstone and Lu, 2009]{doi:10.1198/jasa.2009.0121}
+Johnstone, I.~M. and Lu, A.~Y. (2009).
+\newblock On consistency and sparsity for principal components analysis in high
+  dimensions.
+\newblock {\em Journal of the American Statistical Association},
+  104(486):682--693.
+\newblock PMID: 20617121.
+
+\bibitem[Ma, 2013]{Ma_2013}
+Ma, Z. (2013).
+\newblock Sparse principal component analysis and iterative thresholding.
+\newblock {\em The Annals of Statistics}, 41(2):772–801.
+
+\end{thebibliography}

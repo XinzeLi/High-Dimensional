@@ -1,0 +1,534 @@
+\documentclass[12pt]{article}
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{scribe}
+\usepackage{listings}
+
+\usepackage{hyperref}
+\usepackage{cleveref}
+%\usepackage[style=authoryear]{biblatex}
+\renewcommand{\Pr}{{\bf Pr}}
+\newcommand{\Prx}{\mathop{\bf Pr\/}}
+\newcommand{\E}{{\bf E}}
+\newcommand{\Ex}{\mathop{\bf E\/}}
+\newcommand{\Var}{{\bf Var}}
+\newcommand{\Varx}{\mathop{\bf Var\/}}
+\newcommand{\Cov}{{\bf Cov}}
+\newcommand{\Cor}{{\bf Corr}}
+\newcommand{\Covx}{\mathop{\bf Cov\/}}
+\newcommand{\rank}{\text{rank}}
+
+% shortcuts for symbol names that are too long to type
+\newcommand{\eps}{\epsilon}
+\newcommand{\lam}{\lambda}
+\renewcommand{\l}{\ell}
+\newcommand{\la}{\langle}
+\newcommand{\ra}{\rangle}
+%\newcommand{\wh}{\widehat}
+
+% "blackboard-fonted" letters for the reals, naturals etc.
+\newcommand{\R}{\mathbb R}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\F}{\mathbb F}
+\newcommand{\Q}{\mathbb Q}
+%\newcommand{\C}{\mathbb C}
+\DeclareMathOperator{\Tr}{Tr}
+
+% operators that should be typeset in Roman font
+\newcommand{\poly}{\mathrm{poly}}
+\newcommand{\polylog}{\mathrm{polylog}}
+\newcommand{\sgn}{\mathrm{sgn}}
+\newcommand{\avg}{\mathop{\mathrm{avg}}}
+\newcommand{\val}{{\mathrm{val}}}
+
+% complexity classes
+\renewcommand{\P}{\mathrm{P}}
+\newcommand{\NP}{\mathrm{NP}}
+\newcommand{\BPP}{\mathrm{BPP}}
+\newcommand{\DTIME}{\mathrm{DTIME}}
+\newcommand{\ZPTIME}{\mathrm{ZPTIME}}
+\newcommand{\BPTIME}{\mathrm{BPTIME}}
+\newcommand{\NTIME}{\mathrm{NTIME}}
+
+% values associated to optimization algorithm instances
+\newcommand{\Opt}{{\mathsf{Opt}}}
+\newcommand{\Alg}{{\mathsf{Alg}}}
+\newcommand{\Lp}{{\mathsf{Lp}}}
+\newcommand{\Sdp}{{\mathsf{Sdp}}}
+\newcommand{\Exp}{{\mathsf{Exp}}}
+
+% if you think the sum and product signs are too big in your math mode; x convention
+% as in the probability operators
+\newcommand{\littlesum}{{\textstyle \sum}}
+\newcommand{\littlesumx}{\mathop{{\textstyle \sum}}}
+\newcommand{\littleprod}{{\textstyle \prod}}
+\newcommand{\littleprodx}{\mathop{{\textstyle \prod}}}
+
+% horizontal line across the page
+\newcommand{\horz}{
+\vspace{-.4in}
+\begin{center}
+\begin{tabular}{p{\textwidth}}\\
+\hline
+\end{tabular}
+\end{center}
+}
+
+% calligraphic letters
+\newcommand{\calA}{{\cal A}}
+\newcommand{\calB}{{\cal B}}
+\newcommand{\calC}{{\cal C}}
+\newcommand{\calD}{{\cal D}}
+\newcommand{\calE}{{\cal E}}
+\newcommand{\indep}{\rotatebox[origin=c]{90}{$\models$}}
+\newcommand{\calF}{{\cal F}}
+\newcommand{\calG}{{\cal G}}
+\newcommand{\calH}{{\cal H}}
+\newcommand{\calI}{{\cal I}}
+\newcommand{\calJ}{{\cal J}}
+\newcommand{\calK}{{\cal K}}
+\newcommand{\calL}{{\cal L}}
+\newcommand{\calM}{{\cal M}}
+\newcommand{\calN}{{\cal N}}
+\newcommand{\calO}{{\cal O}}
+\newcommand{\calP}{{\cal P}}
+\newcommand{\calQ}{{\cal Q}}
+\newcommand{\calR}{{\cal R}}
+\newcommand{\calS}{{\cal S}}
+\newcommand{\calT}{{\cal T}}
+\newcommand{\calU}{{\cal U}}
+\newcommand{\calV}{{\cal V}}
+\newcommand{\calW}{{\cal W}}
+\newcommand{\calX}{{\cal X}}
+\newcommand{\calY}{{\cal Y}}
+\newcommand{\calZ}{{\cal Z}}
+
+% bold letters (useful for random variables)
+\renewcommand{\a}{{\boldsymbol a}}
+\renewcommand{\b}{{\boldsymbol b}}
+\renewcommand{\c}{{\boldsymbol c}}
+\renewcommand{\d}{{\boldsymbol d}}
+\newcommand{\e}{{\boldsymbol e}}
+\newcommand{\f}{{\boldsymbol f}}
+\newcommand{\g}{{\boldsymbol g}}
+\newcommand{\h}{{\boldsymbol h}}
+\renewcommand{\i}{{\boldsymbol i}}
+\renewcommand{\j}{{\boldsymbol j}}
+\renewcommand{\k}{{\boldsymbol k}}
+\newcommand{\m}{{\boldsymbol m}}
+\newcommand{\n}{{\boldsymbol n}}
+\renewcommand{\o}{{\boldsymbol o}}
+\newcommand{\p}{{\boldsymbol p}}
+\newcommand{\q}{{\boldsymbol q}}
+\renewcommand{\r}{{\boldsymbol r}}
+\newcommand{\s}{{\boldsymbol s}}
+\renewcommand{\t}{{\boldsymbol t}}
+\renewcommand{\u}{{\boldsymbol u}}
+\renewcommand{\v}{{\boldsymbol v}}
+\newcommand{\w}{{\boldsymbol w}}
+\newcommand{\x}{{\boldsymbol x}}
+\newcommand{\y}{{\boldsymbol y}}
+\newcommand{\z}{{\boldsymbol z}}
+\newcommand{\A}{{\boldsymbol A}}
+\newcommand{\B}{{\boldsymbol B}}
+\newcommand{\D}{{\boldsymbol D}}
+%\newcommand{\G}{{\boldsymbol G}}
+\renewcommand{\H}{{\boldsymbol H}}
+\newcommand{\I}{{\boldsymbol I}}
+\newcommand{\J}{{\boldsymbol J}}
+\newcommand{\K}{{\boldsymbol K}}
+\renewcommand{\L}{{\boldsymbol L}}
+\newcommand{\M}{{\boldsymbol M}}
+\renewcommand{\O}{{\boldsymbol O}}
+\renewcommand{\S}{{\boldsymbol S}}
+\newcommand{\T}{{\boldsymbol T}}
+%\newcommand{\U}{{\boldsymbol U}}
+\newcommand{\V}{{\boldsymbol V}}
+\newcommand{\W}{{\boldsymbol W}}
+\newcommand{\X}{{\boldsymbol X}}
+\newcommand{\Y}{{\boldsymbol Y}}
+\newcommand{\bra}[1]{\left(#1\right)}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\innprod}[1]{\left\langle#1\right\rangle}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\wh}[1]{\widehat{#1}}
+\newcommand{\wt}[1]{\widetilde{#1}}
+\def\beq{\begin{equation}}
+\def\eeq{\end{equation}}
+\def\bal{\begin{aligned}}
+\def\eal{\end{aligned}}
+\def\beqal{\begin{equation}\begin{aligned}}
+\def\eeqal{\end{aligned}\end{equation}}
+
+
+% useful for Fourier analysis
+\newcommand{\bits}{\{-1,1\}}
+\newcommand{\bitsn}{\{-1,1\}^n}
+\newcommand{\bn}{\bitsn}
+\newcommand{\isafunc}{{: \bitsn \rightarrow \bits}}
+\newcommand{\fisafunc}{{f : \bitsn \rightarrow \bits}}
+\newcommand{\ndone}{\frac{1}{n}}
+
+% if you want
+\newcommand{\half}{{\textstyle \frac12}}
+
+\newcommand{\myfig}[4]{\begin{figure}[h] \begin{center} \includegraphics[width=#1\textwidth]{#2} \caption{#3} \label{#4} \end{center} \end{figure}} 
+
+\Scribe{Xinze Li}
+\Lecturer{Chao Gao}
+\LectureNumber{11}
+\LectureDate{Feb 12, 2020}
+\LectureTitle{Sparse PCA}
+
+\lstset{style=mystyle}
+
+
+
+\begin{document}
+	\MakeScribeTop
+
+%#############################################################
+%#############################################################
+%#############################################################
+%#############################################################
+First let's recall the sparse PCA model, so $X_1,\cdots,X_n\sim \mathcal{N}(0,\Sigma)$ i.i.d., and suppose that $\Sigma=\lambda\theta\theta^\top +I_p$. So we could observe that the eigenvalue of $\Sigma$ is
+\beq
+(1+\lam, 1,\cdots,1)
+\eeq
+The leading eigenvalue corresponds to $\theta$.
+ also suppose $\theta$ is normalized: $\norm{\theta}=1$ and $\theta\in\Theta(p,s)$ is sparse. We now define a new parameter space $\calV(p,s)=\left\{\theta\in\Theta(p,s): \norm{\theta}=1\right\}$. So now we are ready to define our estimator
+\begin{equation}\label{eq:estimator}
+\wh{\theta}=\arg\max_{\theta\in\calV(p,s)} \theta^\top\wh{\Sigma}\theta
+\end{equation}
+where $\wh{\Sigma}=\frac{1}{n}\sum X_iX_i^\top$ is the sample covariance matrix as usual. Recall that we define matrix innner product as
+\begin{equation}
+\innprod{A,B}=\sum A_{ij}B_{ij}=\Tr(A^\top B)
+\end{equation}
+We say that $\wh{\theta}$ is consistent if $\wh{\theta}^\top\theta\rightarrow 1$, which is the same to say the angle between the two vectors goes to $0$. From \cite{doi:10.1198/jasa.2009.0121}, we know that $\wh{\theta}$ is consistent if and only if $\frac{p}{n}\rightarrow 0$.
+Now we are ready to do our analysis.
+\section{Analysis on Sparse PCA}
+\subsection{Rough Analysis}\label{sec: rough}
+We could write out the loss function
+\beq\bal\label{eq1}
+\norm{\wh{\theta}\wh{\theta}^\top-\theta\theta^\top}_F^2&=2\bra{1-\abs{\wh{\theta}^\top\theta}^2}\\
+&=2\sin^2\angle \bra{\wh{\theta}, \theta}
+\eal\eeq
+Also note the following relation
+\beq\bal\label{eq:relation}
+\innprod{\Sigma, \theta\theta^\top-\wh{\theta}\wh{\theta}^\top}&=\innprod{\lambda\theta\theta^\top +I_p, \theta\theta^\top-\wh{\theta}\wh{\theta}^\top}\\
+&=\lambda\innprod{\theta\theta^\top, \theta\theta^\top-\wh{\theta}\wh{\theta}^\top}+\innprod{I_p,\theta\theta^\top-\wh{\theta}\wh{\theta}^\top}\\
+&=\lambda \bra{1-\abs{\wh{\theta}^\top\theta}^2}\\
+&=\frac{\lambda}{2}\norm{\wh{\theta}\wh{\theta}^\top-\theta\theta^\top}_F^2
+\eal\eeq 
+Also note that
+\[
+\innprod{\wh{\Sigma},\theta\theta^\top-\wh{\theta}\wh{\theta}^\top}\leq 0
+\]
+due to the defintion of the estimator $\wh{\theta}$ in ~\ref{eq:estimator}. We now define 
+\beq
+\Delta = \frac{\theta\theta^\top-\wh{\theta}\wh{\theta}^\top}{\norm{\wh{\theta}\wh{\theta}^\top-\theta\theta^\top}_F}
+\eeq
+We could observe some of $\Delta$'s property: the rank of $\Delta$ is not greater than 2 and that $\Delta$ is also sparse, with only $2s$ nonzero column and $2s$ nonzero rows. Continuing the analysis, we have that
+\beq\bal\label{eq:contanaly}
+\innprod{\Sigma, \theta\theta^\top-\wh{\theta}\wh{\theta}^\top}&=\innprod{\Sigma-\wh{\Sigma}, \theta\theta^\top-\wh{\theta}\wh{\theta}^\top}+\innprod{\wh{\Sigma}, \theta\theta^\top-\wh{\theta}\wh{\theta}^\top}\\
+&\leq \innprod{\Sigma-\wh{\Sigma}, \theta\theta^\top-\wh{\theta}\wh{\theta}^\top}\\
+&=\norm{\wh{\theta}\wh{\theta}^\top-\theta\theta^\top}_F\cdot \innprod{\Sigma-\wh{\Sigma}, \Delta}\\
+&\leq \norm{\wh{\theta}\wh{\theta}^\top-\theta\theta^\top}_F\cdot \sup_{\norm{\Delta}_F=1, \Delta=\Delta^\top \atop \text{rank}(\Delta)\leq 2, |\text{rowsupp}(\Delta)|\leq 2s}\innprod{\Sigma-\wh{\Sigma}, \Delta}\\
+\eal\eeq
+Now use equation~\ref{eq:relation}, we have the following inequalities:
+\beq\bal\label{eq:ess}
+\norm{\wh{\theta}\wh{\theta}^\top-\theta\theta^\top}_F\leq \frac{2}{\lambda}\sup_{\norm{\Delta}_F=1, \Delta=\Delta^\top \atop rk(\Delta)\leq 2, |\text{rowsupp}(\Delta)|\leq 2s}\innprod{\Sigma-\wh{\Sigma}, \Delta}\\
+\eal\eeq
+Now let's analyze $\Delta$. We know from matrix theory, for all $\Delta$, $\norm{\Delta}_F=1$, $\Delta=\Delta^\top$, $\text{rank}(\Delta)\leq 2$, $|\text{rowsupp}(\Delta)|\leq 2s$, we could do the  eigenvalue decomposition as follows
+\[
+\Delta = d_1v_1v_1^\top+d_2v_2v_2^\top, \quad \norm{v_1}=\norm{v_2}=1
+\]
+Since the Frobenius norm of $\Delta$ is $1$, we also know that $d_1^2+d_2^2=1$. And a rough analysis could deduce that $v_1,v_2\in\calV(p,2s)$. So now we could write that
+\beqal
+\innprod{\Sigma-\wh{\Sigma}, \Delta}&\leq \frac{2}{\lam}\innprod{\Sigma-\wh{\Sigma}, d_1v_1v_1^\top+d_2v_2v_2^\top}\\
+&\leq \abs{d_1}\abs{v_1^\top \bra{\wh{\Sigma}-\Sigma}v_1}+\abs{d_2}\abs{v_2^\top\bra{\wh{\Sigma}-\Sigma}v_2}\\
+&\leq \abs{v_1^\top \bra{\wh{\Sigma}-\Sigma}v_1}+\abs{v_2^\top\bra{\wh{\Sigma}-\Sigma}v_2}\\
+&\leq \sup_{v\in \calV(p,2s)}\abs{v^\top\bra{\wh{\Sigma}-\Sigma}v}\\
+\eeqal
+And thus
+\beq \bal\label{eq: furthe anal}
+\norm{\wh{\theta}\wh{\theta}^\top-\theta\theta^\top}_F
+&\leq \frac{4}{\lam}\sup_{v\in \calV(p,2s)}\abs{v^\top\bra{\wh{\Sigma}-\Sigma}v}\\
+&\lesssim \frac{1}{\lam}\norm{\Sigma}_{op}\sqrt{\frac{s\log ep/s}{n}}\\
+&=\frac{1+\lam}{\lam}\sqrt{\frac{s\log ep/s}{n}}\\
+\eal \eeq
+So we've reached the final conclusion:
+\beq
+\norm{\wh{\theta}\wh{\theta}^\top-\theta\theta^\top}_F^2\lesssim \frac{\lambda^2+1}{\lambda^2}\frac{s\log ep/s}{n}
+\eeq
+So observe that this upper bound has a natural interpretation: $\frac{s\log ep/s}{n}$ is just the error we constantly get, the denominato $\lam^2$ is the square of the eigenvalue gap, aka the difference between the largest and the second largest eigenvalue, the numerator $\lam^2+1$ is 
+From the literature~\cite{Cai_2013}, we know that the optimal rate is actually
+\beq\label{eq:boundnotgood}
+\inf_{\wh{\theta}}\sup_{\theta\in \calV(p,s)}\E\norm{\wh{\theta}\wh{\theta}^\top-\theta\theta^\top}_F^2\asymp \frac{\lambda+1}{\lambda^2}\frac{s\log ep/s}{n}
+\eeq
+So we note that the analysis we just did is not as good as the optimal rate because $\lambda$ might not be bounded. So either the estimator is not that good, or the analysis we just did is not sharp. And it turns out that our analysis is not sharp. 
+\subsection{More Subtle Analysis}
+We already knew that $X_i\sim \calN\bra{0, \lam\theta\theta^\top+I_p}$. So we could write $X_i=\sqrt{\lam}w_i\theta+z_i$, where $w_i\sim \calN(0,1)$ and $z_i\sim \calN(0, I_p)$ and that $w\indep z$ are independent variables. So we now could write the sample covariance matrix $\wh{\Sigma}$ as follows
+\beq \bal
+\frac{1}{n}\sum X_i X_i^\top &=  \lam\bra{\sum \frac{1}{n} w_i^2} \theta\theta^\top +\frac{\sqrt{\lam}}{n}\sum w_i\theta z_i^\top \\
+&+\frac{\sqrt{\lam}}{n}\sum w_iz_i\theta^\top+\frac{1}{n}\sum z_iz_i^\top
+\eal \eeq
+Observing this equation, we note that the first part of RHS is the part that we would like to kill: it contributes the $\lambda^2$ in equation~\ref{eq:boundnotgood}. In other words, that's the part that makes the bound in~\ref{sec: rough} not sharp.
+So naturally, now we plan to analyze the behavior of 
+\beq
+\wt{\Sigma}=\lam\bra{\sum \frac{1}{n} w_i^2} \theta\theta^\top+I_p
+\eeq
+And it is easy to mimic the proof we just did and have
+\beq\bal
+\innprod{\wt{\Sigma}, \theta\theta^\top-\wh{\theta}\wh{\theta}^\top}&=\frac{\lam}{2}\bra{\frac{1}{n}\sum w_i^2}\norm{\theta\theta^\top-\wh{\theta}\wh{\theta}^\top}_F^2\\
+&\leq \innprod{\wt{\Sigma}-\Sigma,\theta\theta^\top-\wh{\theta}\wh{\theta}^\top}
+\eal \eeq
+Using this relation, and mimicing the techiniques in equation~\ref{eq:contanaly} and ~\ref{eq: furthe anal}, we could derive inequality as follows:
+\beq \label{eq:ess2}
+\norm{\theta\theta^\top-\wh{\theta}\wh{\theta}^\top}_F\leq \frac{4}{\lam\bra{\frac{1}{n}w_i^2}}\sup_{v\in \calV(p,2s)}\abs{v^\top\bra{\wh{\Sigma}-\wt{\Sigma}}v}\\
+\eeq
+It is easy to prove that the term $\frac{1}{n}w_i^2$ in the denominator is bounded away from zero with high probability when $n$ goes to infinity. Let's analyze the $\sup$ term. 
+\beq \bal\label{eq:twoparts}
+\sup_{v\in \calV(p,2s)}\abs{v^\top\bra{\wh{\Sigma}-\wt{\Sigma} } v}&\leq \sup_{v\in \calV(p,2s)}\abs{v^\top\bra{ \frac{1}{n} \sum z_iz_i^\top-I_p}v}\\&+2\sqrt{\lam}\sup_{v\in \calV(p,2s)}\abs{v^\top \bra{\frac{1}{n} \sum w_i\theta z_i^\top }v}
+\eal\eeq
+From previous lectures, we know that the first term on the RHS could be bounded by
+\beq\label{eq:firstpart}
+\sup_{v\in \calV(p,2s)}\abs{v^\top\bra{ \frac{1}{n} \sum z_iz_i^\top-I_p}v}\lesssim \sqrt{\frac{s\log ep/s}{n}}
+\eeq
+As for the second term, note that we could write
+\[\begin{aligned}
+\abs{v^\top \bra{\frac{1}{n} \sum w_i\theta z_i^\top }v}&=\abs{\frac{1}{n}\sum w_i\bra{v^\top \theta}\cdot\bra{v^\top z_i}}\\
+&\leq \abs{\frac{1}{n}\sum w_i\cdot\bra{v^\top z_i}}
+\eal
+\]
+The inequality is because $\theta$ is already normalized. Note that $w_i$ and $v^\top z_i$ are independent one dimension normal variables, and their properties are easy to analyze. So we have the bound for the second term of the RHS of equation~\ref{eq:twoparts}
+\beq\bal\label{eq:secondpart}
+2\sqrt{\lam}\sup_{v\in \calV(p,2s)}\abs{v^\top \bra{\frac{1}{n} \sum w_i\theta z_i^\top }v}\lesssim \sqrt{\lam}\sqrt{\frac{s\log ep/s}{n}}
+\eal\eeq
+Plugging the estimates ~\ref{eq:firstpart} and ~\ref{eq:secondpart} back to \ref{eq:ess2}, we finally reach the following theorem
+\begin{theorem}
+Suppose $\frac{s\log ep/s}{n}\lesssim 1$, the nwe have the following bound with high probability
+\beq
+\norm{\theta\theta^\top-\wh{\theta}\wh{\theta}^\top}_F^2\lesssim\frac{1+\lam}{\lam^2}\frac{s\log ep/s}{n}
+\eeq
+\end{theorem}
+From this theorem, we know that the estimator $\wh{\theta}=\arg\min_{\theta\in\calV(p,s)}\theta^\top \wh{\Sigma}\theta$ achieves the minimax rate.
+\section{How to Compute Sparse PCA: Using Convex Relaxation}
+It turns out that the estimator~\ref{eq:estimator} is hard to compute directly. Although note that we could use the power method iteration
+\beq
+\theta^{t+1}=\frac{\wh{\Sigma}\theta^t}{\norm{\wh{\Sigma}\theta^t}}
+\eeq
+to compute
+\beq
+\theta^*=\arg\min_{\norm{\theta}=1}\theta^\top \wh{\Sigma}\theta
+\eeq
+This does not guarantee the sparsity. Our method here is first to think about
+\[
+\theta^\top \wh{\Sigma}\theta=\innprod{\wh{\Sigma},\theta\theta^\top}\mathop{=}^{F=\theta\theta^\top}=\innprod{\wh{\Sigma}, F}
+\]
+Note that we have to ensure that $F$ is a rank 1 matrix (the sparsity could be controlled when adding $\ell_1$ penalty). So now we consider the following two sets
+\beq\bal
+\calP&=\left\{ P=P^\top=P^2: \text{rank}(P)=1 \right\}\\
+\calF&=\text{conv}\bra{\calP}
+\eal\eeq
+Actually we could explicitly write out $calF$ due to the following lemma
+\begin{lemma}
+\beq \calF=\left\{ F=F^\top: 0\preceq F\preceq I_p, \Tr(F)=1 \right\}\eeq 
+\end{lemma}
+\begin{proof}
+First, it is obvious that $\calF$ is convex. Also need to show that $\calP\subseteq\calF$ which is also obviously true and that for all $F\in\calF$, we could write $F$ as a convex combination of matrices in $\calP$. To prove that, we simply do eigenvalue decomposition on $F$ and have
+\[
+F=\sum d_jv_jv_j^\top
+\]
+Due to the defintion of $\calF$, we know that $0\leq d_j\leq 1$ and that $\sum d_j=1$, and thus $F$ is a convex combination of rank 1 matrices.
+\end{proof}
+Note that $\calF$ is often referred to as fantope.
+So now we could consider the following convex program
+\beq\bal\label{cvx}
+\max_{F\in\R^{p\times p}}&\quad \innprod{\wh{\Sigma}, F}-\rho \norm{F}_1\\
+s.t.&\quad F\in \calF
+\eal\eeq
+where $\norm{F}_1=\sum_{ij}\abs{F_{ij}}$. We also define $\norm{F}_\infty=\max_{ij}\abs{F_{ij}}$. The upper program~\ref{cvx} is first introduced in the paper~\cite{alex2004direct}, though it does not analyze its property. So as usual, we start from the basic inequality
+\beq
+\innprod{\wh{\Sigma},\wh{F}}-\rho \norm{\wh{F}}_1\geq \innprod{\wh{\Sigma},F}-\rho \norm{F}_1
+\eeq 
+Reordering the inequality gives
+\beq
+\innprod{\wh{\Sigma}, F-\wh{F}}\leq \rho\bra{\norm{F}_1-\norm{\wh{F}}_1}
+\eeq
+Plugging in $\wt{\Sigma}$
+\beq
+\innprod{\wt{\Sigma}, F-\wh{F}}\leq \rho\bra{\norm{F}_1-\norm{\wh{F}}_1}+\innprod{\wt{\Sigma}-\wh{\Sigma}, F-\wh{F}}
+\eeq
+Now let $\Delta=\wh{F}-F$ and $S=\text{supp}(\theta)$. With slight abuse of notation, we also denote $\norm{\Delta_{SS}}_1=\sum_{(i,j)\in S\times S}\abs{\Delta_{ij}}$ and that $\norm{\Delta_{(SS)^\complement}}_1=\sum_{(i,j)\in (S\times S)^\complement}\abs{\Delta_{ij}}$. Now, suppose that $\norm{\wt{\Sigma}-\wh{\Sigma}}_\infty\leq \rho$ we have
+\beq\bal
+\innprod{\wt{\Sigma}, F-\wh{F}}&\leq \rho\bra{\norm{F}_1-\norm{\wh{F}}_1}+\norm{\wt{\Sigma}-\wh{\Sigma}}_\infty\cdot \norm{\wh{F}-F}_1\\
+&=\rho \norm{F_{SS}}_1-\rho\norm{F_{SS}+\Delta_{SS}}_1-\rho\norm{\Delta_{(SS)^\complement}}_1\\&+\norm{\wt{\Sigma}-\wh{\Sigma}}_\infty\cdot\bra{\norm{\Delta_{SS}}_1+\norm{\Delta_{(SS)^\complement}}_1}\\
+&\leq 2\rho \norm{\Delta_{SS}}_1\leq 2\rho\sqrt{s^2}\norm{\Delta}_F
+\eal\eeq
+\section{Analysis of the Convex Relaxation}
+Let's recall the convex relaxation problem we did in last lecture
+\beq\bal\label{cvx}
+\max_{F\in\R^{p\times p}}&\quad \innprod{\wh{\Sigma}, F}-\rho \norm{F}_1\\
+s.t.&\quad F\in \calF
+\eal\eeq
+where $\norm{F}_1=\sum_{ij}\abs{F_{ij}}$. We also define $\norm{F}_\infty=\max_{ij}\abs{F_{ij}}$. The upper program~\ref{cvx} is first introduced in the paper~\cite{alex2004direct}, though it does not analyze its property. So as usual, we start from the basic inequality
+\beq
+\innprod{\wh{\Sigma},\wh{F}}-\rho \norm{\wh{F}}_1\geq \innprod{\wh{\Sigma},F}-\rho \norm{F}_1
+\eeq 
+Reordering the inequality gives
+\beq
+\innprod{\wh{\Sigma}, F-\wh{F}}\leq \rho\bra{\norm{F}_1-\norm{\wh{F}}_1}
+\eeq
+Plugging in $\wt{\Sigma}$
+\beq
+\innprod{\wt{\Sigma}, F-\wh{F}}\leq \rho\bra{\norm{F}_1-\norm{\wh{F}}_1}+\innprod{\wt{\Sigma}-\wh{\Sigma}, F-\wh{F}}
+\eeq
+Now let $\Delta=\wh{F}-F$ and $S=\text{supp}(\theta)$. With slight abuse of notation, we also denote $\norm{\Delta_{SS}}_1=\sum_{(i,j)\in S\times S}\abs{\Delta_{ij}}$ and that $\norm{\Delta_{(SS)^\complement}}_1=\sum_{(i,j)\in (S\times S)^\complement}\abs{\Delta_{ij}}$. Now, suppose that $\norm{\wt{\Sigma}-\wh{\Sigma}}_\infty\leq \rho$ we have
+\beq\bal
+\innprod{\wt{\Sigma}, F-\wh{F}}&\leq \rho\bra{\norm{F}_1-\norm{\wh{F}}_1}+\norm{\wt{\Sigma}-\wh{\Sigma}}_\infty\cdot \norm{\wh{F}-F}_1\\
+&=\rho \norm{F_{SS}}_1-\rho\norm{F_{SS}+\Delta_{SS}}_1-\rho\norm{\Delta_{(SS)^\complement}}_1\\&+\norm{\wt{\Sigma}-\wh{\Sigma}}_\infty\cdot\bra{\norm{\Delta_{SS}}_1+\norm{\Delta_{(SS)^\complement}}_1}\\
+&\leq 2\rho \norm{\Delta_{SS}}_1\leq 2\rho\sqrt{s^2}\norm{\Delta}_F=2\rho s\norm{\Delta}_F
+\eal\eeq
+Thus, if $\norm{\wh{\Sigma}-\wt{\Sigma}}_\infty\leq \rho$, we have the following bound
+\beq\label{eq: bound}
+\innprod{\wt{\Sigma}, F-\wh{F}}\leq 2\rho s\norm{\Delta}_F
+\eeq 
+Also note that, from our construction of $\wt{\Sigma}$ in last lecture
+\beq
+\wt{\Sigma}=\lam\bra{\sum \frac{1}{n} w_i^2} \theta\theta^\top+I_p
+\eeq
+we have
+\beqal\label{eq:relation1}
+\innprod{\wt{\Sigma}, F-\wh{F}}&=\lam\bra{\frac{1}{n}\Sigma w_i^2}\bra{\theta^\top F\theta-\theta^\top \wh{F}\theta}+\innprod{I_p, F-\wh{F}}\\
+&=\lam\bra{\frac{1}{n}\Sigma w_i^2}\bra{1-\theta^\top \wh{F}\theta}
+\eeqal
+Now let's look at the loss function
+\beqal\label{eq:relation2}
+\norm{\wh{F}-F}_F^2&=\norm{\wh{F}}_F^2+\norm{{F}}_F^2-2\innprod{\wh{F},F}\\
+&=\norm{\wh{F}}_F^2+1-2\theta^\top\wh{F}\theta\\
+&\leq 2\bra{1-\theta^\top \wh{F}\theta}
+\eeqal
+The inequality is because of the following evaluation
+\beq
+\norm{\wh{F}}_F^2\leq \norm{\wh{F}}_N\cdot \norm{\wh{F}}_{op}=\Tr\bra{\wh{F}}\cdot \norm{\wh{F}}_{op}\leq 1
+\eeq
+by definition. Here $\norm{\cdot}_N$ is the nuclear norm, i.e., the sum of singular values. And so now we have the bound of the loss function, by combining ~\cref{eq: bound,eq:relation1,eq:relation2}
+\beqal
+\norm{\wh{F}-F}_F^2&\leq \frac{2}{\lam \bra{\ndone\sum w_i^2}}\innprod{\wt{\Sigma}, F-\wh{F}}\\
+&\leq 2\rho s\norm{\Delta}_F\cdot \frac{2}{\lam \bra{\ndone\sum w_i^2}}
+\eeqal
+Since $\Delta=\wh{F}-F$, we could further simplify it as
+\beq
+\norm{\wh{F}-F}_F^2\leq \frac{16\rho^2s^2}{\lam^2\bra{\ndone\sum w_i^2}^2}
+\eeq
+Now let's see what $\rho$ should we choose such that  $\norm{\wh{\Sigma}-\wt{\Sigma}}_\infty\leq \rho$ holds w.h.p.. And this analysis is quite similar to the one we did in last lecture. First, we surely have
+\beq \bal
+\wh{\Sigma}=\frac{1}{n}\sum X_i X_i^\top &=  \lam\bra{\sum \frac{1}{n} w_i^2} \theta\theta^\top +\frac{\sqrt{\lam}}{n}\sum w_i\theta z_i^\top \\
+&+\frac{\sqrt{\lam}}{n}\sum w_iz_i\theta^\top+\frac{1}{n}\sum z_iz_i^\top\\
+\eeqal
+\beqal
+\wt{\Sigma}&=\lam\bra{\sum \frac{1}{n} w_i^2} \theta\theta^\top+I_p
+\eal \eeq
+And thus
+\beq\label{eq:part}
+\norm{\wh{\Sigma}-\wt{\Sigma}}_\infty\leq \norm{\ndone \sum z_iz_i^\top -I_p}_\infty+2\sqrt{\lam}\norm{\ndone\sum w_i\theta z_i^\top}_\infty
+\eeq
+The first term is surely bounded by
+\beq
+\norm{\ndone \sum z_iz_i^\top -I_p}_\infty\lesssim \sqrt{\frac{\log p}{n}}
+\eeq
+And for the second term in the RHS
+\beqal
+\norm{\ndone\sum w_i\theta z_i^\top}_\infty&=\max_{j,k}\abs{\bra{\ndone\sum w_i z_{ij}}\theta_k}\\
+&\leq \max_j \norm{\ndone\sum w_iz_{ij}}\\
+&\leq \sqrt{\frac{\log p}{n}}
+\eeqal
+Note that $\theta$ is a normalized vector and that $w_i\indep z_{ij}\sim \calN(0,1)$. Combining these to estimation~\ref{eq:part} and assuming that $\log p /n \lesssim 1$, we have the following estimate w.h.p.
+\beq
+\norm{\wh{\Sigma}-\wt{\Sigma}}_\infty\lesssim \bra{1+\sqrt{\lam}}\sqrt{\frac{\log p}{n}}
+\eeq
+Also as always
+\beq
+\ndone \sum w_i^2\geq \frac{1}{2}
+\eeq
+holds w.h.p.. Now we could state the theorem.
+\begin{theorem}
+Assume that $\log p /p \lesssim 1$, and choose $\rho = C\bra{1+\sqrt{\lam}}\sqrt{\frac{\log p}{n}}$, then w.h.p.
+\beq
+\norm{\wh{F}-F}_F^2\leq \frac{1+\lam}{\lam^2}\frac{s^2\log p}{n}
+\eeq
+\end{theorem}
+Recall that  the minimax rate from last lecture is
+\beq
+\norm{\theta\theta^\top-\wh{\theta}\wh{\theta}^\top}_F^2\lesssim\frac{1+\lam}{\lam^2}\frac{s\log ep/s}{n}
+\eeq
+So there is an extra $s$ in the theorem. So we start to wonder is the estimator not so good or the analysis not sharp. And we could observe that the objective of the convex program is to maximize $\innprod{\wh{\Sigma}, F}-\rho \norm{F}_1$, where $\norm{F}_1=\sum_{ij}\abs{F_{ij}}$. So the sparsity structure is changed when we regard a rank 1 matrix in $\R^{p\times p}$ as a vector of length $p^2$. An improvement in paper~\cite{Ma_2013} is motivated by the power iteration we mentioned in the last lecture, and is presented as
+\beq
+\theta^t = \frac{\calT\bra{\wh{\Sigma}\theta^{t-1}}}{\norm{\calT\bra{\wh{\Sigma}\theta^{t-1}}}}
+\eeq
+where $\calT$ is the thresholding operator. The paper also proved that if $\abs{\sin\angle(\theta^0,\theta)}\leq c<1$, so the initial angle is not orthogonal to the truth, then the algorithm achieves the minimax rate. This sounds nice, but finding nontrivial angle in high-dimensional space is hard and requires exponential time if we do random sampling. However, we could smartly set the initial angle as the leading eigenvector of $\wh{F}$ we just constructed, i.e.
+\beq
+\theta^0=\arg\max_\theta \theta^\top \wh{F}\theta
+\eeq
+This method is doable due to the \textit{Sin-Theta Theorem} or \textit{Davis-Kahan Theorem} we are going to prove. Also from the paper~\cite{Berthet_2013}, we know that if $n\not\gtrsim s^2$, then achieving the minimax rate of PCA is a NPC problem, in other words $n\gtrsim s^2$ is necessary for a polynomial time algorithm. This result will probably be discussed next week. For now, let's prove the Sin-Theta theorem.
+\begin{proposition}\label{thm:sintheta}
+Suppose that $A$ and $B$ are PSD and their EVD could be written as follows
+\beq
+A=\sum d_ju_ju_j^\top,\quad B=\sum \lam_j v_jv_j^\top
+\eeq
+And that $d_1\geq d_2\geq\cdots\geq d_p\geq 0$, $\lam_1\geq \lam_2\geq\cdots\geq \lam_p\geq 0$, then we have the following estimate
+\beq
+\norm{u_1u_1^\top - v_1v_1^\top}_F^2\leq \frac{4\norm{A-B}_F^2}{\bra{d_1-d_2}^2}
+\eeq
+\end{proposition}
+\begin{proof}
+First, note that
+\beqal
+\innprod{A,u_1u_1^\top-v_1v_1^\top}&=d_1\innprod{u_1u_1^\top, u_1u_1^\top-v_1v_1^\top}+\sum_{j\geq 2}d_j\innprod{u_ju_j^\top, u_1u_1^\top-v_1v_1^\top}\\
+&\geq d_1\innprod{u_1u_1^\top, u_1u_1^\top-v_1v_1^\top}+d_2\sum_{j\geq 2}\innprod{u_ju_j^\top, -v_1v_1^\top}\\
+\eeqal
+Now note that the identity matrix could be decompose as
+\beq
+I_p=\sum_{j\in[p]}u_ju_j^\top=u_1u_1^\top +\sum_{j\not = 2}u_ju_j^\top 
+\eeq
+Thus, we have
+\beqal\label{eq:anal1}
+\innprod{A,u_1u_1^\top-v_1v_1^\top}&\geq d_1\innprod{u_1u_1^\top, u_1u_1^\top-v_1v_1^\top}+d_2\innprod{I_p-u_1u_1^\top, -v_1v_1^\top}\\
+&=\bra{d_1-d_2}\bra{1-\abs{u_1^\top v_1}^2}\\
+&=\frac{d_1-d_2}{2}\norm{u_1u_1^\top-v_1v_1^\top}_F^2
+\eeqal
+Now note that since $v_1$ is the leading eigenvector of $B$, we have
+\beq
+\innprod{B,u_1u_1^\top-v_1v_1^\top}=u_1^\top Bu_1-v_1^\top Bv_1\leq 0
+\eeq
+And thus the following inequality holds
+\beqal\label{eq:anal2}
+\innprod{A, u_1u_1^\top-v_1v_1^\top}&=\innprod{A-B,u_1u_1^\top-v_1v_1^\top}+\innprod{B,u_1u_1^\top-v_1v_1^\top}\\
+&\leq \innprod{A-B,u_1u_1^\top-v_1v_1^\top}\\
+&\leq \norm{A-B}_F\norm{u_1u_1^\top-v_1v_1^\top}_F
+\eeqal
+Combining ~\cref{eq:anal1,eq:anal2}, we reach the conclusion
+\beq
+\norm{u_1u_1^\top - v_1v_1^\top}_F^2\leq \frac{4\norm{A-B}_F^2}{\bra{d_1-d_2}^2}
+\eeq
+\end{proof}
+Suppose $\theta^0$ is the leading eigenvector of $\wh{F}$
+\beq
+\theta^0=\arg\max_\theta \theta^\top \wh{F}\theta
+\eeq
+We now could use the Sin-Theta theorem ~\ref{thm:sintheta} to conclude that
+\beq
+\norm{\theta^0\bra{\theta^0}^\top-\theta\theta^\top}_F^2\leq 4\norm{\wh{F}-F}_F^2
+\eeq
+since here for $F=\theta\theta^\top$, $d_1=1$ and $d_2=0$. Another two useful inequalities eigen-space perturbation theory are \href{https://terrytao.wordpress.com/2010/01/12/254a-notes-3a-eigenvalues-and-sums-of-hermitian-matrices/}{Weyl inequality} and \href{https://www.princeton.edu/~yc5/ele538_math_data/lectures/spectral_method.pdf}{Wedin inequality}.
+%%%%%%%%%%% If you don't have citations then comment the lines below:
+%
+
+
+\bibliographystyle{apalike}
+\bibliography{SparsePCA.bib}	
+%%%%%%%%%%% end of doc
+\end{document}
