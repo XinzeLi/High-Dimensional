@@ -1,0 +1,332 @@
+\documentclass[12pt]{article}
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{scribe}
+\usepackage{listings}
+
+\usepackage{hyperref}
+\usepackage{cleveref}
+%\usepackage[style=authoryear]{biblatex}
+\renewcommand{\Pr}{{\bf Pr}}
+\newcommand{\Prx}{\mathop{\bf Pr\/}}
+\newcommand{\E}{{\bf E}}
+\newcommand{\Ex}{\mathop{\bf E\/}}
+\newcommand{\Var}{{\bf Var}}
+\newcommand{\Varx}{\mathop{\bf Var\/}}
+\newcommand{\Cov}{{\bf Cov}}
+\newcommand{\Cor}{{\bf Corr}}
+\newcommand{\Covx}{\mathop{\bf Cov\/}}
+\newcommand{\rank}{\text{rank}}
+
+% shortcuts for symbol names that are too long to type
+\newcommand{\eps}{\epsilon}
+\newcommand{\lam}{\lambda}
+\renewcommand{\l}{\ell}
+\newcommand{\la}{\langle}
+\newcommand{\ra}{\rangle}
+%\newcommand{\wh}{\widehat}
+
+% "blackboard-fonted" letters for the reals, naturals etc.
+\newcommand{\R}{\mathbb R}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\F}{\mathbb F}
+\newcommand{\Q}{\mathbb Q}
+%\newcommand{\C}{\mathbb C}
+\DeclareMathOperator{\Tr}{Tr}
+
+% operators that should be typeset in Roman font
+\newcommand{\poly}{\mathrm{poly}}
+\newcommand{\polylog}{\mathrm{polylog}}
+\newcommand{\sgn}{\mathrm{sgn}}
+\newcommand{\avg}{\mathop{\mathrm{avg}}}
+\newcommand{\val}{{\mathrm{val}}}
+
+% complexity classes
+\renewcommand{\P}{\mathrm{P}}
+\newcommand{\NP}{\mathrm{NP}}
+\newcommand{\BPP}{\mathrm{BPP}}
+\newcommand{\DTIME}{\mathrm{DTIME}}
+\newcommand{\ZPTIME}{\mathrm{ZPTIME}}
+\newcommand{\BPTIME}{\mathrm{BPTIME}}
+\newcommand{\NTIME}{\mathrm{NTIME}}
+
+% values associated to optimization algorithm instances
+\newcommand{\Opt}{{\mathsf{Opt}}}
+\newcommand{\Alg}{{\mathsf{Alg}}}
+\newcommand{\Lp}{{\mathsf{Lp}}}
+\newcommand{\Sdp}{{\mathsf{Sdp}}}
+\newcommand{\Exp}{{\mathsf{Exp}}}
+
+% if you think the sum and product signs are too big in your math mode; x convention
+% as in the probability operators
+\newcommand{\littlesum}{{\textstyle \sum}}
+\newcommand{\littlesumx}{\mathop{{\textstyle \sum}}}
+\newcommand{\littleprod}{{\textstyle \prod}}
+\newcommand{\littleprodx}{\mathop{{\textstyle \prod}}}
+
+% horizontal line across the page
+\newcommand{\horz}{
+\vspace{-.4in}
+\begin{center}
+\begin{tabular}{p{\textwidth}}\\
+\hline
+\end{tabular}
+\end{center}
+}
+
+% calligraphic letters
+\newcommand{\calA}{{\cal A}}
+\newcommand{\calB}{{\cal B}}
+\newcommand{\calC}{{\cal C}}
+\newcommand{\calD}{{\cal D}}
+\newcommand{\calE}{{\cal E}}
+\newcommand{\indep}{\rotatebox[origin=c]{90}{$\models$}}
+\newcommand{\calF}{{\cal F}}
+\newcommand{\calG}{{\cal G}}
+\newcommand{\calH}{{\cal H}}
+\newcommand{\calI}{{\cal I}}
+\newcommand{\calJ}{{\cal J}}
+\newcommand{\calK}{{\cal K}}
+\newcommand{\calL}{{\cal L}}
+\newcommand{\calM}{{\cal M}}
+\newcommand{\calN}{{\cal N}}
+\newcommand{\calO}{{\cal O}}
+\newcommand{\calP}{{\cal P}}
+\newcommand{\calQ}{{\cal Q}}
+\newcommand{\calR}{{\cal R}}
+\newcommand{\calS}{{\cal S}}
+\newcommand{\calT}{{\cal T}}
+\newcommand{\calU}{{\cal U}}
+\newcommand{\calV}{{\cal V}}
+\newcommand{\calW}{{\cal W}}
+\newcommand{\calX}{{\cal X}}
+\newcommand{\calY}{{\cal Y}}
+\newcommand{\calZ}{{\cal Z}}
+\newcommand{\com}{^\complement}
+\newcommand{\inv}{^{-1}}
+\newcommand{\tp}{^\top}
+% bold letters (useful for random variables)
+\renewcommand{\a}{{\boldsymbol a}}
+\renewcommand{\b}{{\boldsymbol b}}
+\renewcommand{\c}{{\boldsymbol c}}
+\renewcommand{\d}{{\boldsymbol d}}
+\newcommand{\e}{{\boldsymbol e}}
+\newcommand{\f}{{\boldsymbol f}}
+\newcommand{\g}{{\boldsymbol g}}
+\newcommand{\h}{{\boldsymbol h}}
+\renewcommand{\i}{{\boldsymbol i}}
+\renewcommand{\j}{{\boldsymbol j}}
+\renewcommand{\k}{{\boldsymbol k}}
+\newcommand{\m}{{\boldsymbol m}}
+\newcommand{\n}{{\boldsymbol n}}
+\renewcommand{\o}{{\boldsymbol o}}
+\newcommand{\p}{{\boldsymbol p}}
+\newcommand{\q}{{\boldsymbol q}}
+\renewcommand{\r}{{\boldsymbol r}}
+\newcommand{\s}{{\boldsymbol s}}
+\renewcommand{\t}{{\boldsymbol t}}
+\renewcommand{\u}{{\boldsymbol u}}
+\renewcommand{\v}{{\boldsymbol v}}
+\newcommand{\w}{{\boldsymbol w}}
+\newcommand{\x}{{\boldsymbol x}}
+\newcommand{\y}{{\boldsymbol y}}
+\newcommand{\z}{{\boldsymbol z}}
+\newcommand{\A}{{\boldsymbol A}}
+\newcommand{\B}{{\boldsymbol B}}
+\newcommand{\D}{{\boldsymbol D}}
+%\newcommand{\G}{{\boldsymbol G}}
+\renewcommand{\H}{{\boldsymbol H}}
+\newcommand{\I}{{\boldsymbol I}}
+\newcommand{\J}{{\boldsymbol J}}
+\newcommand{\K}{{\boldsymbol K}}
+\renewcommand{\L}{{\boldsymbol L}}
+\newcommand{\M}{{\boldsymbol M}}
+\renewcommand{\O}{{\boldsymbol O}}
+\renewcommand{\S}{{\boldsymbol S}}
+\newcommand{\T}{{\boldsymbol T}}
+%\newcommand{\U}{{\boldsymbol U}}
+\newcommand{\V}{{\boldsymbol V}}
+\newcommand{\W}{{\boldsymbol W}}
+\newcommand{\X}{{\boldsymbol X}}
+\newcommand{\Y}{{\boldsymbol Y}}
+\newcommand{\bra}[1]{\left(#1\right)}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\innprod}[1]{\left\langle#1\right\rangle}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\wh}[1]{\widehat{#1}}
+\newcommand{\wt}[1]{\widetilde{#1}}
+\def\beq{\begin{equation}}
+\def\eeq{\end{equation}}
+\def\bal{\begin{aligned}}
+\def\eal{\end{aligned}}
+\def\beqal{\begin{equation}\begin{aligned}}
+\def\eeqal{\end{aligned}\end{equation}}
+
+
+% useful for Fourier analysis
+\newcommand{\bits}{\{-1,1\}}
+\newcommand{\bitsn}{\{-1,1\}^n}
+\newcommand{\bn}{\bitsn}
+\newcommand{\isafunc}{{: \bitsn \rightarrow \bits}}
+\newcommand{\fisafunc}{{f : \bitsn \rightarrow \bits}}
+\newcommand{\ndone}{\frac{1}{n}}
+
+\makeatletter
+\newcommand{\distas}[1]{\mathbin{\overset{#1}{\kern\z@\sim}}}%
+\newsavebox{\mybox}\newsavebox{\mysim}
+\newcommand{\distras}[1]{%
+  \savebox{\mybox}{\hbox{\kern3pt$\scriptstyle#1$\kern3pt}}%
+  \savebox{\mysim}{\hbox{$\sim$}}%
+  \mathbin{\overset{#1}{\kern\z@\resizebox{\wd\mybox}{\ht\mysim}{$\sim$}}}%
+}
+\makeatother
+\newcommand{\iid}{\distras{\text{i.i.d.}}}
+\makeatletter
+\newcommand*{\rom}[1]{\expandafter\@slowromancap\romannumeral #1@}
+\makeatother
+
+% if you want
+\newcommand{\half}{{\textstyle \frac12}}
+
+\newcommand{\myfig}[4]{\begin{figure}[h] \begin{center} \includegraphics[width=#1\textwidth]{#2} \caption{#3} \label{#4} \end{center} \end{figure}} 
+\newcommand{\chara}{\mathbb{1}}
+
+\Scribe{Xinze Li}
+\Lecturer{Chao Gao}
+\LectureNumber{09}
+\LectureDate{Feb 05, 2020}
+\LectureTitle{Precision Matrix Inference}
+
+\lstset{style=mystyle}
+
+
+
+\begin{document}
+	\MakeScribeTop
+
+%#############################################################
+%#############################################################
+%#############################################################
+%#############################################################
+Suppose that $X\sim \calN\bra{0,\Omega^{-1}}$ and that $\Omega = \Sigma^{-1}$ is the precision matrix. And thus
+\beq
+X=
+\begin{pmatrix}
+x_1\\
+x_2
+\end{pmatrix}
+\sim \calN\bra{0, \begin{pmatrix}
+\Omega_{11}&\Omega_{12}\\
+\Omega_{21}&\Omega_{22}\\
+\end{pmatrix}^{-1}}
+\eeq
+And so we have the \href{https://stats.stackexchange.com/questions/30588/deriving-the-conditional-distributions-of-a-multivariate-normal-distribution}{conditional probability distribution} as follows
+\beq
+x_1|x_2\sim \calN\bra{-\Omega_{11}^{-1}\Omega_{12}x_2, \Omega_{11}^{-1}}
+\eeq
+Suppose that $A={1,2}$, and that $A^\complement=\left\{ 3,\cdots, p\right\}$. So
+\beq
+X=\begin{pmatrix}
+x_1\\
+\vrule\\
+x_p
+\end{pmatrix}
+=\begin{pmatrix}
+X_A\\
+X_{A^\complement}
+\end{pmatrix}
+\eeq
+Thus
+\beq\label{eq:defxa}
+	X_A|X_{A\com}\sim \calN\bra{-\Omega_{AA}^{-1}\Omega_{AA\com}X_{A\com}, \Omega_{AA}^{-1}}
+\eeq
+Let
+\beq\label{eq:defb}
+B^\top = -\Omega_{AA}\inv \Omega_{AA\com},\quad B\in\R^{(p-2)\times 2}
+\eeq
+Now
+\beq
+\Omega_{AA}=
+\begin{pmatrix}
+\Omega_{11}&\Omega_{12}\\
+\Omega_{21}&\Omega_{22}
+\end{pmatrix}
+\eeq
+We suppose that $X_1, \cdots, X_n \iid \calN(0, \Omega\inv)$ and that
+\beq
+\max_j \sum_k \chara\bra{\Omega_{jk}\ne 0}\leq s
+\eeq
+Also suppose
+\beq
+M\inv\leq \lam_{\min} (\Omega)\leq \lam_{\max} (\Omega)\leq M
+\eeq
+and that $\wh{B}$ is the  lasso estimate
+\beq
+\wh{B}=\arg\min_{B\in\R^{(p-2)\times 2}}\sum_i\norm{X_{iA}-B\tp X_{iA\com}}^2+\lam\norm{B}_1
+\eeq
+By HW6 P2, we know that w.h.p. the following holds
+\begin{equation}\bal\label{eq:lassoprop}
+\frac{1}{n} \sum_{i=1}^{n}\left\|\left(\widehat{B}-B\right)^{T} X_{i A^{\complement}}\right\|^{2} &\lesssim \frac{s \log p}{n}\\
+\left\|\widehat{B}-B\right\|_{1} &\lesssim s \sqrt{\frac{\log p}{n}}
+\eal\end{equation}
+$B$ is defined in ~\ref{eq:defb}. We now define the estimator
+\beq\label{eq:OAA}
+\wh{\Omega}_{AA}\inv = \ndone \sum_i \bra{X_{iA}-\wh{B}\tp X_{iA\com}}\cdot\bra{X_{iA}-\wh{B}\tp X_{iA\com}}\tp
+\eeq
+Now note that from~\ref{eq:defxa}, we could write
+\beq\label{eq:xia}
+X_{iA}=B\tp X_{iA\com}+\Omega_{AA}^{-\frac{1}{2}}w_i, \quad w_i\sim \calN(0, I_2)
+\eeq
+Combining \cref{eq:OAA,eq:xia}, we have
+\beqal
+\wh{\Omega}_{AA}\inv& = \ndone \sum_i \bra{B\tp X_{iA\com}+\Omega_{AA}^{-\frac{1}{2}}w_i-\wh{B}\tp X_{iA\com}}\cdot\bra{B\tp X_{iA\com}+\Omega_{AA}^{-\frac{1}{2}}w_i-\wh{B}\tp X_{iA\com}}\tp\\
+&=\underbrace{\ndone\sum_i \Omega_{AA}^{-\frac{1}{2}}w_iw_i\tp\Omega_{AA}^{-\frac{1}{2}}}_{(\text{\rom{1}})}+ \underbrace{\ndone\sum_i \bra{\bra{B-\wh{B}}\tp X_{iA\com}}\cdot \bra{\bra{B-\wh{B}}\tp X_{iA\com}}\tp}_{(\text{\rom{2}})}\\
+&+\underbrace{\ndone\sum_i \bra{\Omega_{AA}^{-\frac{1}{2}}w_i}\cdot X_{iA\com}\tp \bra{B-\wh{B}} }_{(\text{\rom{3}})}+\underbrace{\ndone\sum_i \bra{B-\wh{B}}\tp X_{iA\com} \cdot  \bra{\Omega_{AA}^{-\frac{1}{2}}w_i}\tp }_{(\text{\rom{4}})}
+\eeqal
+Note that
+\beq
+(\text{\rom{1}})-\Omega_{AA}^{-1}=\ndone\Omega_{AA}^{-\frac{1}{2}}\bra{\sum_i w_iw_i\tp-I_2}\Omega_{AA}^{-\frac{1}{2}}
+\eeq
+which is asymptotically normal.
+For $(\text{\rom{2}})$, from ~\ref{eq:lassoprop}, we have
+\beq
+\norm{(\text{\rom{2}})}_{op}\leq \frac{1}{n} \sum_{i=1}^{n}\left\|\left(\widehat{B}-B\right)^{T} X_{i A^{\complement}}\right\|^{2} \lesssim \frac{s \log p}{n}\\
+\eeq
+The magnitude of $(\text{\rom{3}})$ and $(\text{\rom{4}})$ is the same, so we simply analyze $\norm{(\text{\rom{3}})}_F$
+\beqal
+\norm{(\text{\rom{3}})}_F&= \norm{\bra{B-\wh{B}}^\top\cdot \bra{\ndone\sum_i X_{iA\com} \bra{\Omega_{AA}^{-\frac{1}{2}}w_i}\tp }}_F\\
+&\leq \norm{B-\wh{B}}_1\cdot \norm{\ndone\sum_i X_{iA\com} \bra{\Omega_{AA}^{-\frac{1}{2}}w_i}\tp}_\infty\\
+&\lesssim s\sqrt{\frac{\log p}{n}}\cdot \max_{j\in [2],k\in [p-2]}\ndone\sum_i \bra{\Omega_{AA}^{-\frac{1}{2}}w_i}_j\cdot \bra{X_{iA\com}}_k\\
+&\lesssim s\sqrt{\frac{\log p}{n}}\cdot \sqrt{\frac{\log p}{n}}=s\frac{\log p}{n}
+\eeqal
+Thus
+\beq
+\sqrt{n} \bra{\wh{\Omega}_{AA}\inv -\Omega_{AA}\inv} = \frac{1}{\sqrt{n}}\Omega_{AA}^{-\frac{1}{2}}\bra{\sum_i w_iw_i\tp-I_2}\Omega_{AA}^{-\frac{1}{2}}+O_p\bra{\frac{s\log p}{\sqrt{n}}}
+\eeq
+We conclude with the following theorem (See HW6 2(c) for details)
+\begin{theorem}[\cite{Ren_2015}]
+If $\frac{s\log p}{\sqrt{n}}\rightarrow 0$, then
+\beq
+\sqrt{n}\bra{\wh{\Omega}_{12}-\Omega_{12}}\leadsto \calN\bra{0, \Omega_{11}\Omega_{22}+\Omega_{12}^2}
+\eeq
+\end{theorem}
+From \cite{Ren_2015}, define parameter space
+\begin{equation}
+\mathcal{G}_{0}\left(M, k_{n, p}\right)=\left\{\begin{aligned} \Omega=\left(\omega_{i j}\right)_{1 \leq i, j \leq p}: \max _{1 \leq j \leq p} \sum_{i=1}^{p} 1\left\{\omega_{i j} \neq 0\right\} \leq k_{n, p} \\ \text { and } 1 / M \leq \lambda_{\min }(\Omega) \leq \lambda_{\max }(\Omega) \leq M \end{aligned}\right\}
+\end{equation}
+ we also know the minimax rate
+ \begin{equation}
+ \inf _{\hat{\omega}_{i j}} \sup _{\mathcal{G}_{0}\left(M, k_{n, p}\right)} \mathbb{E}\left|\hat{\omega}_{i j}-\omega_{i j}\right| \asymp \max \left\{n^{-1} k_{n, p} \log p, n^{-1 / 2}\right\}
+ \end{equation}
+Thus we could observe that ther condition $\frac{s\log p}{\sqrt{n}}$ is necessary.
+
+
+
+
+
+\bibliographystyle{apalike}
+\bibliography{PrecisionInference.bib}	
+%%%%%%%%%%% end of doc
+\end{document}
