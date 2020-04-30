@@ -1,0 +1,12 @@
+\begin{thebibliography}{}
+
+\bibitem[Gao et~al., 2017]{gao2017estimation}
+Gao, C., Han, F., and Zhang, C.-H. (2017).
+\newblock On estimation of isotonic piecewise constant signals.
+
+\bibitem[Zhang, 2002]{zhang2002}
+Zhang, C.-H. (2002).
+\newblock Risk bounds in isotonic regression.
+\newblock {\em Ann. Statist.}, 30(2):528--555.
+
+\end{thebibliography}
